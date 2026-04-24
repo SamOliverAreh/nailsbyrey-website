@@ -194,6 +194,7 @@
   .gallery-overlay-tag { font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.8; }
 
   /* PRICING */
+  /* ... (unchanged, same as before) ... */
   #pricing { background: var(--cream); }
   .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
   .pricing-card {
@@ -476,7 +477,7 @@
       <p class="section-desc reveal reveal-delay-2">Transparent pricing for every service. All sets include nail prep, cuticle care & aftercare advice.</p>
     </div>
     <div class="pricing-grid">
-      <!-- pricing cards unchanged -->
+      <!-- pricing cards (unchanged) -->
       <div class="pricing-card reveal reveal-delay-1">
         <div class="pricing-icon">💅</div>
         <div class="pricing-name">Manicure</div>
@@ -680,6 +681,7 @@
 
     <!-- DASHBOARD (hidden until logged in) -->
     <div id="adminDash" style="display:none;">
+      <!-- same admin content as before ... -->
       <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
         <button class="admin-action" onclick="logoutAdmin()">Log out</button>
       </div>
@@ -732,6 +734,7 @@
 
       <!-- GALLERY MANAGER TAB -->
       <div class="admin-panel" id="tab-gallery-mgr">
+        <!-- same gallery upload ... -->
         <div class="gallery-upload-zone" id="uploadZone" onclick="document.getElementById('photoInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
           <input type="file" id="photoInput" accept="image/*" multiple onchange="handleFileSelect(this.files)">
           <div class="upload-icon">📷</div>
@@ -797,7 +800,6 @@ function loadBookings() {
   if (saved) {
     try { return JSON.parse(saved); } catch { return []; }
   }
-  // Initial sample data
   return [
     { id: 1, fname: 'Aisha', lname: 'Karim', phone: '+60176445338', email: 'aisha@email.com', service: 'Manicure + Gel — RM 30', date: '2025-06-12', time: '2:00 PM', notes: 'Light pink please', status: 'confirmed', code: 'NEWCLIENT10', finalService: '', finalPrice: null },
     { id: 2, fname: 'Nura', lname: 'Halim', phone: '+601123456789', email: 'nura@email.com', service: 'Manicure — RM 10', date: '2025-06-13', time: '11:00 AM', notes: '', status: 'pending', code: '', finalService: '', finalPrice: null },
@@ -833,6 +835,19 @@ let discountsData = loadDiscounts();
 const ADMIN_PASSWORD = 'nailsbyrey2025';
 const ADMIN_WA = '60176445338';
 
+// ─── FORMAT PHONE NUMBER ───────────────────────────────────
+function formatPhone(raw) {
+  // Remove all non-digit characters
+  let digits = raw.replace(/\D/g, '');
+  if (digits.startsWith('60')) {
+    return '+60' + digits.substring(2);
+  } else if (digits.startsWith('0')) {
+    return '+60' + digits.substring(1);
+  } else {
+    return '+60' + digits;
+  }
+}
+
 // ─── ADMIN LOGIN ───────────────────────────────────────────
 function checkAdminPw() {
   const val = document.getElementById('adminPwInput').value;
@@ -864,7 +879,6 @@ const navLinks = document.getElementById('navLinks');
 hamburgerBtn.addEventListener('click', () => {
   navLinks.classList.toggle('show');
 });
-// Close menu when a link is clicked
 navLinks.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => navLinks.classList.remove('show'));
 });
@@ -1046,10 +1060,13 @@ function renderDiscountsSection() {
 // ─── BOOKING ───────────────────────────────────────────────
 function submitBooking() {
   const fname = document.getElementById('fname').value.trim();
-  const phone = document.getElementById('phone').value.trim();
+  let phoneRaw = document.getElementById('phone').value.trim();
   const service = document.getElementById('service').value;
   const bdate = document.getElementById('bdate').value;
-  if (!fname || !phone || !service || !bdate) { showToast('Please fill in all required fields ✦'); return; }
+  if (!fname || !phoneRaw || !service || !bdate) { showToast('Please fill in all required fields ✦'); return; }
+
+  // Format phone number for Malaysia
+  const phone = formatPhone(phoneRaw);
 
   let code = document.getElementById('dcode').value.trim().toUpperCase();
   if (code) {
@@ -1074,7 +1091,7 @@ function submitBooking() {
   };
 
   bookings.push(newBooking);
-  saveBookings(); // PERSIST
+  saveBookings();
   document.getElementById('bookingForm').style.display = 'none';
   const s = document.getElementById('bookingSuccess');
   s.style.display = 'block';
@@ -1083,6 +1100,7 @@ function submitBooking() {
   renderBookingsTable();
   renderCustomersTable();
 
+  // Notify admin via WhatsApp (always uses properly formatted number)
   const adminMsg = encodeURIComponent(`🔔 New Booking Request\n\n${fname} ${newBooking.lname}\n${service}\n${bdate} at ${newBooking.time}\nPhone: ${phone}\nCode: ${code || 'none'}\nNotes: ${newBooking.notes || 'none'}`);
   window.open(`https://wa.me/${ADMIN_WA}?text=${adminMsg}`, '_blank');
 }
@@ -1176,6 +1194,7 @@ function updateStatus(id, status) {
 function notifyWA(id) {
   const b = bookings.find(b => b.id === id);
   if (!b) return;
+  // Use the stored phone (already formatted)
   const msg = encodeURIComponent(`Hi ${b.fname}! ✨ Your appointment with Nails by Rey is confirmed for ${b.date} at ${b.time}. Service: ${b.service.split(' —')[0]}. See you soon! — Rey 💅`);
   window.open(`https://wa.me/${b.phone.replace(/\D/g,'')}?text=${msg}`, '_blank');
 }
