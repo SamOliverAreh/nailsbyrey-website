@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nails by Rey · Vive Reytchel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #f2c4ce;
+    --rose-deep: #c97d8e;
+    --rose-dark: #7a3a4a;
+    --cream: #fdf6f0;
+    --blush: #faeaea;
+    --gold: #c9a96e;
+    --gold-light: #f0e4ca;
+    --ink: #2a1f1f;
+    --muted: #7a6a6a;
+    --white: #ffffff;
+    --card-border: rgba(201,169,110,0.25);
+    --shadow: 0 4px 30px rgba(42,31,31,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(253,246,240,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem; height: 64px;
+  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; letter-spacing: 0.05em; color: var(--rose-dark); }
+  .nav-logo span { color: var(--gold); font-style: italic; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--rose-dark); }
+  .nav-book { background: var(--rose-dark); color: white !important; padding: 0.45rem 1.2rem; border-radius: 2rem; font-size: 0.78rem !important; }
+  .nav-book:hover { background: var(--rose-deep); color: white !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 2rem 4rem;
+    background: linear-gradient(160deg, var(--cream) 60%, var(--blush) 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -80px; right: -80px;
+    width: 420px; height: 420px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(242,196,206,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -60px; left: -60px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge { display: inline-block; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-light); padding: 0.3rem 1rem; border-radius: 2rem; margin-bottom: 1.5rem; }
+  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.2rem, 8vw, 6.5rem); font-weight: 300; line-height: 1.05; color: var(--rose-dark); margin-bottom: 0.3rem; }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub { font-size: 1rem; color: var(--muted); margin: 1.2rem auto 2.4rem; max-width: 380px; line-height: 1.7; }
+  .btn { display: inline-block; padding: 0.85rem 2.2rem; border-radius: 2rem; font-size: 0.88rem; letter-spacing: 0.06em; text-decoration: none; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .btn-primary { background: var(--rose-dark); color: white; }
+  .btn-primary:hover { background: var(--rose-deep); transform: translateY(-1px); }
+  .btn-outline { border: 1px solid var(--rose-dark); color: var(--rose-dark); background: transparent; margin-left: 1rem; }
+  .btn-outline:hover { background: var(--rose-dark); color: white; transform: translateY(-1px); }
+
+  /* SOCIAL STRIP */
+  .socials-strip {
+    background: var(--rose-dark); padding: 1rem 3rem;
+    display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap;
+  }
+  .socials-strip a { display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.05em; transition: color 0.2s; }
+  .socials-strip a:hover { color: var(--gold-light); }
+  .social-icon { width: 28px; height: 28px; background: rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; color: var(--rose-dark); margin-bottom: 0.5rem; }
+  .section-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.7; max-width: 460px; }
+  .section-header { text-align: center; margin-bottom: 3.5rem; }
+  .section-header .section-desc { margin: 0 auto; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* GALLERY */
+  #gallery { background: var(--white); }
+  .gallery-filter { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .filter-btn { padding: 0.4rem 1.2rem; border-radius: 2rem; border: 1px solid var(--card-border); background: transparent; font-size: 0.8rem; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .filter-btn.active, .filter-btn:hover { background: var(--rose-dark); color: white; border-color: var(--rose-dark); }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .gallery-item {
+    aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
+    position: relative; background: var(--blush);
+  }
+  .gallery-item-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.4rem; transition: transform 0.3s; }
+  .gallery-item:hover .gallery-item-inner { transform: scale(1.03); }
+  .gallery-nail-art { font-size: 2.5rem; }
+  .gallery-tag { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .gallery-overlay { position: absolute; inset: 0; background: rgba(122,58,74,0.75); opacity: 0; transition: opacity 0.25s; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.3rem; color: white; }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; }
+  .gallery-overlay-tag { font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.8; }
+
+  /* PRICING */
+  #pricing { background: var(--cream); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .pricing-card {
+    background: var(--white); border: 1px solid var(--card-border); border-radius: 16px; padding: 2rem;
+    position: relative; transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .pricing-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+  .pricing-card.featured { border-color: var(--gold); border-width: 1.5px; }
+  .featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: white; font-size: 0.7rem; letter-spacing: 0.1em; padding: 0.25rem 0.9rem; border-radius: 2rem; white-space: nowrap; }
+  .pricing-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .pricing-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; color: var(--rose-dark); margin-bottom: 0.3rem; }
+  .pricing-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 1.2rem; }
+  .pricing-price { font-size: 1.8rem; font-weight: 300; color: var(--ink); }
+  .pricing-price span { font-size: 1rem; color: var(--muted); }
+  .pricing-items { list-style: none; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .pricing-items li { font-size: 0.83rem; color: var(--muted); padding-left: 1.2rem; position: relative; }
+  .pricing-items li::before { content: '✦'; position: absolute; left: 0; font-size: 0.5rem; color: var(--gold); top: 0.25rem; }
+  .pricing-divider { height: 1px; background: var(--card-border); margin: 1.2rem 0; }
+  .discount-tag { display: inline-block; background: var(--blush); color: var(--rose-deep); font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 2rem; margin-top: 0.6rem; }
+
+  /* DISCOUNTS */
+  #discounts { background: linear-gradient(135deg, var(--rose-dark) 0%, #5a2535 100%); color: white; }
+  #discounts .section-label { color: var(--rose); }
+  #discounts .section-title { color: white; }
+  #discounts .section-desc { color: rgba(255,255,255,0.7); }
+  .discounts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 3rem; }
+  .discount-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 1.5rem; text-align: center; }
+  .discount-pct { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: var(--rose); line-height: 1; }
+  .discount-off { font-size: 0.78rem; letter-spacing: 0.1em; color: var(--gold-light); text-transform: uppercase; margin-bottom: 0.6rem; }
+  .discount-title { font-size: 0.95rem; font-weight: 500; color: white; margin-bottom: 0.3rem; }
+  .discount-cond { font-size: 0.8rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+  .discount-code { display: inline-block; margin-top: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--gold-light); font-size: 0.75rem; letter-spacing: 0.12em; padding: 0.25rem 0.8rem; border-radius: 2rem; }
+
+  /* BOOKING */
+  #booking { background: var(--white); }
+  .booking-wrap { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: start; }
+  .booking-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; color: var(--rose-dark); margin-bottom: 1rem; }
+  .booking-info p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .booking-steps { display: flex; flex-direction: column; gap: 1rem; }
+  .booking-step { display: flex; align-items: flex-start; gap: 0.8rem; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--rose-dark); color: white; font-size: 0.72rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.15rem; }
+  .step-text { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+  .step-text strong { color: var(--ink); font-weight: 500; display: block; margin-bottom: 0.1rem; }
+
+  .booking-form { background: var(--cream); border-radius: 16px; padding: 2rem; border: 1px solid var(--card-border); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label { display: block; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.65rem 0.9rem; border: 1px solid var(--card-border);
+    border-radius: 8px; font-size: 0.9rem; background: var(--white); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--rose-deep); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-submit { width: 100%; padding: 0.9rem; background: var(--rose-dark); color: white; border: none; border-radius: 2rem; font-size: 0.88rem; letter-spacing: 0.06em; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .form-submit:hover { background: var(--rose-deep); transform: translateY(-1px); }
+  .booking-success { display: none; text-align: center; padding: 2rem; }
+  .booking-success .check { font-size: 2.5rem; margin-bottom: 1rem; }
+  .booking-success h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--rose-dark); margin-bottom: 0.5rem; }
+  .booking-success p { font-size: 0.88rem; color: var(--muted); }
+
+  /* NOTIFICATION PREVIEW */
+  .notif-preview { margin-top: 1.5rem; background: var(--white); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem 1.2rem; }
+  .notif-header { display: flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .notif-msg { font-size: 0.82rem; color: var(--muted); line-height: 1.5; background: var(--blush); padding: 0.7rem; border-radius: 6px; font-style: italic; }
+
+  /* ADMIN PANEL */
+  #admin { background: var(--ink); color: white; }
+  #admin .section-label { color: var(--rose); }
+  #admin .section-title { color: white; }
+  .admin-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .admin-tab { padding: 0.5rem 1.2rem; border-radius: 2rem; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); font-size: 0.8rem; cursor: pointer; transition: all 0.2s; background: transparent; font-family: 'DM Sans', sans-serif; }
+  .admin-tab.active { background: var(--rose-dark); color: white; border-color: var(--rose-dark); }
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
+  .admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .admin-table th { text-align: left; padding: 0.7rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); font-weight: 400; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .admin-table td { padding: 0.8rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+  .status-badge { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 2rem; font-size: 0.7rem; }
+  .status-confirmed { background: rgba(100,180,120,0.2); color: #7edd9a; }
+  .status-pending { background: rgba(201,169,110,0.2); color: var(--gold-light); }
+  .status-cancelled { background: rgba(200,80,80,0.2); color: #f5a0a0; }
+  .admin-action { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); padding: 0.2rem 0.7rem; border-radius: 2rem; font-size: 0.72rem; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-right: 0.3rem; transition: all 0.15s; }
+  .admin-action:hover { border-color: var(--rose); color: var(--rose); }
+  .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .admin-stat { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 1.2rem; }
+  .admin-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--rose); }
+  .admin-stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 0.2rem; letter-spacing: 0.05em; }
+  .admin-search { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
+  .admin-search input { flex: 1; padding: 0.6rem 1rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; outline: none; }
+  .admin-search input::placeholder { color: rgba(255,255,255,0.25); }
+  .discount-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end; margin-bottom: 2rem; }
+  .discount-form input, .discount-form select { padding: 0.6rem 0.9rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; outline: none; }
+  .discount-form input::placeholder { color: rgba(255,255,255,0.3); }
+  .discount-form select option { background: #2a1f1f; color: white; }
+  .admin-add-btn { padding: 0.6rem 1.2rem; background: var(--rose-dark); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; white-space: nowrap; }
+
+  /* FOOTER */
+  footer { background: var(--rose-dark); color: rgba(255,255,255,0.7); text-align: center; padding: 2rem; font-size: 0.82rem; }
+  footer a { color: var(--rose); text-decoration: none; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--rose-dark); color: white; padding: 0.9rem 1.5rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 30px rgba(0,0,0,0.2); transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { display: none; }
+    .booking-wrap { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .discount-form { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Nails <span>by Rey</span></div>
+  <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#discounts">Offers</a></li>
+    <li><a href="#booking">Book</a></li>
+    <li><a href="#admin">Admin</a></li>
+    <li><a href="#booking" class="nav-book">Book Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div>
+    <div class="hero-badge">✦ Professional Nail Artist · Kajang, Selangor</div>
+    <h1>Nails<br><em>by Rey</em></h1>
+    <p class="hero-sub">Artisan nail care by Vive Reytchel — where every set is a tiny masterpiece crafted just for you.</p>
+    <a href="#booking" class="btn btn-primary">Book a Session</a>
+    <a href="#gallery" class="btn btn-outline">View Gallery</a>
+  </div>
+</section>
+
+<!-- SOCIALS STRIP -->
+<div class="socials-strip">
+  <a href="https://wa.me/60176445338" target="_blank">
+    <div class="social-icon">💬</div> WhatsApp · 017-6445338
+  </a>
+  <a href="https://instagram.com/nails.by.rey" target="_blank">
+    <div class="social-icon">📸</div> Instagram
+  </a>
+  <a href="https://tiktok.com/@nails.by.rey" target="_blank">
+    <div class="social-icon">🎵</div> TikTok
+  </a>
+  <a href="https://threads.net/@nails.by.rey" target="_blank">
+    <div class="social-icon">🧵</div> Threads
+  </a>
+  <span style="color:rgba(255,255,255,0.4);font-size:0.78rem;">📍 Kajang (Homebased)</span>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Portfolio</div>
+      <h2 class="section-title">The Gallery</h2>
+      <p class="section-desc">A curated collection of sets — each one unique, intentional, and made with love.</p>
+    </div>
+    <div class="gallery-filter">
+      <button class="filter-btn active" onclick="filterGallery('all', this)">All</button>
+      <button class="filter-btn" onclick="filterGallery('gel', this)">Gel</button>
+      <button class="filter-btn" onclick="filterGallery('acrylic', this)">Acrylic</button>
+      <button class="filter-btn" onclick="filterGallery('nail-art', this)">Nail Art</button>
+      <button class="filter-btn" onclick="filterGallery('french', this)">French</button>
+      <button class="filter-btn" onclick="filterGallery('ombre', this)">Ombré</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Services & Rates</div>
+      <h2 class="section-title">Pricing Library</h2>
+      <p class="section-desc">Transparent pricing for every service. All sets include nail prep, cuticle care & aftercare advice.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-icon">💅</div>
+        <div class="pricing-name">Manicure</div>
+        <div class="pricing-desc">Classic manicure — nail shaping, cuticle care and a clean finish.</div>
+        <div class="pricing-price">RM 10 <span>/ set</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-items">
+          <li>Nail shaping & filing</li>
+          <li>Cuticle care</li>
+          <li>Regular polish application</li>
+          <li>Quick & affordable</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <div class="featured-badge">✦ Most Popular</div>
+        <div class="pricing-icon">✨</div>
+        <div class="pricing-name">Manicure + Gel</div>
+        <div class="pricing-desc">Full manicure with long-lasting gel colour that stays glossy for weeks.</div>
+        <div class="pricing-price">RM 30 <span>/ set</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-items">
+          <li>Full manicure included</li>
+          <li>Gel polish application</li>
+          <li>UV/LED cure for durability</li>
+          <li>Lasts 2–3 weeks</li>
+        </ul>
+        <div class="discount-tag">New clients save 10%</div>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-icon">💎</div>
+        <div class="pricing-name">Add-on: Extensions</div>
+        <div class="pricing-desc">Nail tip extensions for extra length — priced per piece.</div>
+        <div class="pricing-price">RM 2 <span>/ piece</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-items">
+          <li>Full set of 10 = RM 20</li>
+          <li>Mix & match length</li>
+          <li>Compatible with gel sets</li>
+          <li>Add to any service</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-icon">🌸</div>
+        <div class="pricing-name">Add-on: Nail Art</div>
+        <div class="pricing-desc">Hand-painted nail art, cat eye, or French design — stunning accent nails or full sets.</div>
+        <div class="pricing-price">RM 10–30 <span>/ set</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-items">
+          <li>Nail art designs</li>
+          <li>Cat eye effect</li>
+          <li>French / modern French</li>
+          <li>Price varies by complexity</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-icon">🔧</div>
+        <div class="pricing-name">Gel Removal</div>
+        <div class="pricing-desc">Safe and gentle gel removal without damaging your natural nails.</div>
+        <div class="pricing-price">RM 20 <span>/ session</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-items">
+          <li>Soak-off gel removal</li>
+          <li>Nail care after removal</li>
+          <li>Can book with new set</li>
+          <li>Gentle on natural nails</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCOUNTS -->
+<section id="discounts">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Current Offers</div>
+      <h2 class="section-title" style="color:white;">Special Deals</h2>
+      <p class="section-desc" style="color:rgba(255,255,255,0.65);margin:0 auto;">Exclusive discounts and seasonal offers — share your code when booking.</p>
+    </div>
+    <div class="discounts-grid" id="discountsGrid">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Appointments</div>
+      <h2 class="section-title">Book a Session</h2>
+      <p class="section-desc">Fill in the form below — Rey will confirm your slot via WhatsApp or email within a few hours.</p>
+    </div>
+    <div class="booking-wrap">
+      <div class="booking-info">
+        <h3>How It Works</h3>
+        <p>Booking takes under 2 minutes. After you submit, you'll receive a confirmation notification with all the details.</p>
+        <div class="booking-steps">
+          <div class="booking-step"><div class="step-num">1</div><div class="step-text"><strong>Choose Your Service</strong>Pick your preferred service and desired date/time.</div></div>
+          <div class="booking-step"><div class="step-num">2</div><div class="step-text"><strong>Submit Your Request</strong>Fill in your contact details and any inspiration notes.</div></div>
+          <div class="booking-step"><div class="step-num">3</div><div class="step-text"><strong>Get Confirmed</strong>Rey will confirm your slot via WhatsApp or email.</div></div>
+          <div class="booking-step"><div class="step-num">4</div><div class="step-text"><strong>Come & Create</strong>Arrive at your slot — sit back, relax and enjoy your new set.</div></div>
+        </div>
+        <div class="notif-preview">
+          <div class="notif-header">📩 Sample Confirmation Message</div>
+          <div class="notif-msg">"Hi [Name]! ✨ Your appointment with Nails by Rey is confirmed for [Date] at [Time]. Service: [Service]. Please reply to reschedule if needed. See you soon! — Rey 💅"</div>
+        </div>
+      </div>
+      <div>
+        <div class="booking-form" id="bookingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="fname" placeholder="e.g. Amira">
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="lname" placeholder="e.g. Zain">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="phone" placeholder="+60 12-345 6789">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="you@email.com">
+          </div>
+          <div class="form-group">
+            <label>Service</label>
+            <select id="service">
+              <option value="">Select a service...</option>
+              <option>Manicure — RM 10</option>
+              <option>Manicure + Gel — RM 30</option>
+              <option>Manicure + Gel + Extensions (10 pcs) — RM 50</option>
+              <option>Nail Art / Cat Eye / French — RM 10–30 add-on</option>
+              <option>Gel Removal — RM 20</option>
+              <option>Gel Removal + New Set — combined</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Preferred Date</label>
+              <input type="date" id="bdate">
+            </div>
+            <div class="form-group">
+              <label>Preferred Time</label>
+              <select id="btime">
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>12:00 PM</option>
+                <option>2:00 PM</option>
+                <option>3:00 PM</option>
+                <option>4:00 PM</option>
+                <option>5:00 PM</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Discount Code (optional)</label>
+            <input type="text" id="dcode" placeholder="e.g. NEWCLIENT10">
+          </div>
+          <div class="form-group">
+            <label>Inspo Notes</label>
+            <textarea id="notes" placeholder="Share any reference, colour ideas, or special requests..."></textarea>
+          </div>
+          <button class="form-submit" onclick="submitBooking()">✦ Request Appointment</button>
+        </div>
+        <div class="booking-success" id="bookingSuccess">
+          <div class="check">🌸</div>
+          <h4>Booking Request Sent!</h4>
+          <p id="successMsg">Rey will confirm your slot shortly via WhatsApp or email. Can't wait to see you!</p>
+          <div style="margin-top:1.2rem;">
+            <a href="https://wa.me/60176445338" target="_blank" class="btn btn-primary" style="font-size:0.82rem;">Message on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="admin">
+  <div class="container">
+    <div class="section-header" style="text-align:left;">
+      <div class="section-label">Management</div>
+      <h2 class="section-title">Admin Dashboard</h2>
+    </div>
+    <div class="admin-stats">
+      <div class="admin-stat"><div class="admin-stat-val" id="stat-total">0</div><div class="admin-stat-label">Total Bookings</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="stat-confirmed">0</div><div class="admin-stat-label">Confirmed</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="stat-pending">0</div><div class="admin-stat-label">Pending</div></div>
+      <div class="admin-stat"><div class="admin-stat-val" id="stat-revenue">RM 0</div><div class="admin-stat-label">Est. Revenue</div></div>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('bookings', this)">Bookings</button>
+      <button class="admin-tab" onclick="switchTab('customers', this)">Customers</button>
+      <button class="admin-tab" onclick="switchTab('discounts-admin', this)">Discounts</button>
+    </div>
+
+    <!-- BOOKINGS TAB -->
+    <div class="admin-panel active" id="tab-bookings">
+      <div class="admin-search">
+        <input type="text" placeholder="Search by name, service, date..." oninput="searchBookings(this.value)" id="bookingSearch">
+      </div>
+      <table class="admin-table" id="bookingsTable">
+        <thead><tr>
+          <th>Customer</th><th>Service</th><th>Date & Time</th><th>Contact</th><th>Status</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="bookingsTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- CUSTOMERS TAB -->
+    <div class="admin-panel" id="tab-customers">
+      <table class="admin-table">
+        <thead><tr>
+          <th>Name</th><th>Phone</th><th>Email</th><th>Visits</th><th>Last Service</th><th>Total Spent</th>
+        </tr></thead>
+        <tbody id="customersTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- DISCOUNTS ADMIN TAB -->
+    <div class="admin-panel" id="tab-discounts-admin">
+      <div class="discount-form">
+        <input type="text" placeholder="Code e.g. BDAY20" id="dc-code">
+        <input type="text" placeholder="Label e.g. Birthday Deal" id="dc-label">
+        <select id="dc-pct">
+          <option>5%</option><option>10%</option><option>15%</option><option>20%</option><option>30%</option>
+        </select>
+        <button class="admin-add-btn" onclick="addDiscount()">+ Add</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Code</th><th>Label</th><th>Discount</th><th>Used</th><th>Actions</th></tr></thead>
+        <tbody id="discountsTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Nails by Rey · Vive Reytchel · 📍 Kajang (Homebased) · <a href="https://wa.me/60176445338">017-6445338</a> · <a href="#booking">Book a Session</a></p>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA STORE ────────────────────────────────────────────
+let bookings = [
+  { id: 1, fname: 'Aisha', lname: 'Karim', phone: '+60176445338', email: 'aisha@email.com', service: 'Manicure + Gel — RM 30', date: '2025-06-12', time: '2:00 PM', notes: 'Light pink please', status: 'confirmed', code: 'NEWCLIENT10' },
+  { id: 2, fname: 'Nura', lname: 'Halim', phone: '+601123456789', email: 'nura@email.com', service: 'Manicure — RM 10', date: '2025-06-13', time: '11:00 AM', notes: '', status: 'pending', code: '' },
+  { id: 3, fname: 'Siti', lname: 'Rahman', phone: '+601098765432', email: 'siti@email.com', service: 'Nail Art / Cat Eye / French — RM 10–30 add-on', date: '2025-06-14', time: '3:00 PM', notes: 'Cat eye, dark burgundy', status: 'confirmed', code: '' },
+];
+
+let discountsData = [
+  { code: 'NEWCLIENT10', label: 'New Client Welcome', pct: '10%', used: 3 },
+  { code: 'BDAY15', label: 'Birthday Special', pct: '15%', used: 1 },
+  { code: 'REFER20', label: 'Referral Reward', pct: '20%', used: 0 },
+  { code: 'LOYAL30', label: 'Loyal Customer (5+ visits)', pct: '30%', used: 2 },
+];
+
+const galleryItems = [
+  { tag: 'nail-art', label: 'Cherry Blossom', emoji: '🌸', bg: '#faeaea' },
+  { tag: 'gel', label: 'Coral Glaze', emoji: '🧡', bg: '#fff0e6' },
+  { tag: 'ombre', label: 'Rose Ombré', emoji: '🌅', bg: '#fce4ec' },
+  { tag: 'french', label: 'Modern French', emoji: '🤍', bg: '#f5f5f5' },
+  { tag: 'nail-art', label: 'Abstract Art', emoji: '🎨', bg: '#e8f4fd' },
+  { tag: 'acrylic', label: 'Nude Almond', emoji: '🍂', bg: '#fdf3e3' },
+  { tag: 'gel', label: 'Berry Dream', emoji: '🫐', bg: '#ede7f6' },
+  { tag: 'nail-art', label: 'Butterfly Wings', emoji: '🦋', bg: '#e1f5fe' },
+  { tag: 'ombre', label: 'Lavender Fade', emoji: '💜', bg: '#f3e5f5' },
+  { tag: 'french', label: 'Gold Tips', emoji: '✨', bg: '#fffde7' },
+  { tag: 'acrylic', label: 'Stiletto Set', emoji: '💅', bg: '#fce4ec' },
+  { tag: 'gel', label: 'Green Forest', emoji: '🌿', bg: '#e8f5e9' },
+];
+
+// ─── GALLERY ───────────────────────────────────────────────
+function renderGallery(filter = 'all') {
+  const grid = document.getElementById('galleryGrid');
+  const items = filter === 'all' ? galleryItems : galleryItems.filter(i => i.tag === filter);
+  grid.innerHTML = items.map(i => `
+    <div class="gallery-item" style="background:${i.bg}">
+      <div class="gallery-item-inner">
+        <div class="gallery-nail-art">${i.emoji}</div>
+        <div class="gallery-tag">${i.tag}</div>
+      </div>
+      <div class="gallery-overlay">
+        <div class="gallery-overlay-title">${i.label}</div>
+        <div class="gallery-overlay-tag">${i.tag}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterGallery(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery(tag);
+}
+
+// ─── DISCOUNTS ─────────────────────────────────────────────
+function renderDiscountsSection() {
+  const grid = document.getElementById('discountsGrid');
+  grid.innerHTML = discountsData.map(d => `
+    <div class="discount-card">
+      <div class="discount-pct">${d.pct.replace('%', '')}</div>
+      <div class="discount-off">% off</div>
+      <div class="discount-title">${d.label}</div>
+      <div class="discount-cond">Use code at checkout or mention when booking</div>
+      <div class="discount-code">${d.code}</div>
+    </div>
+  `).join('');
+}
+
+// ─── BOOKING ───────────────────────────────────────────────
+function submitBooking() {
+  const fname = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const service = document.getElementById('service').value;
+  const bdate = document.getElementById('bdate').value;
+  if (!fname || !phone || !service || !bdate) { showToast('Please fill in all required fields ✦'); return; }
+
+  const newBooking = {
+    id: bookings.length + 1,
+    fname, lname: document.getElementById('lname').value.trim(),
+    phone, email: document.getElementById('email').value.trim(),
+    service, date: bdate, time: document.getElementById('btime').value,
+    notes: document.getElementById('notes').value.trim(),
+    status: 'pending',
+    code: document.getElementById('dcode').value.trim()
+  };
+
+  bookings.push(newBooking);
+  document.getElementById('bookingForm').style.display = 'none';
+  const s = document.getElementById('bookingSuccess');
+  s.style.display = 'block';
+  document.getElementById('successMsg').textContent = `Hi ${fname}! Rey will confirm your ${service.split(' —')[0]} on ${bdate} at ${newBooking.time} shortly via WhatsApp or email. 💅`;
+  updateAdminStats();
+  renderBookingsTable();
+  renderCustomersTable();
+}
+
+// ─── ADMIN STATS ───────────────────────────────────────────
+function updateAdminStats() {
+  document.getElementById('stat-total').textContent = bookings.length;
+  document.getElementById('stat-confirmed').textContent = bookings.filter(b => b.status === 'confirmed').length;
+  document.getElementById('stat-pending').textContent = bookings.filter(b => b.status === 'pending').length;
+  const rev = bookings.filter(b => b.status === 'confirmed').reduce((acc, b) => {
+    const m = b.service.match(/RM (\d+)/);
+    return acc + (m ? parseInt(m[1]) : 0);
+  }, 0);
+  document.getElementById('stat-revenue').textContent = 'RM ' + rev;
+}
+
+// ─── BOOKINGS TABLE ────────────────────────────────────────
+function renderBookingsTable(filter = '') {
+  const tbody = document.getElementById('bookingsTbody');
+  const list = filter ? bookings.filter(b => 
+    `${b.fname} ${b.lname} ${b.service} ${b.date}`.toLowerCase().includes(filter.toLowerCase())
+  ) : bookings;
+  tbody.innerHTML = list.map(b => `
+    <tr>
+      <td>${b.fname} ${b.lname}</td>
+      <td>${b.service.split(' —')[0]}</td>
+      <td>${b.date} · ${b.time}</td>
+      <td style="font-size:0.78rem;color:rgba(255,255,255,0.5)">${b.phone}</td>
+      <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+      <td>
+        ${b.status === 'pending' ? `<button class="admin-action" onclick="updateStatus(${b.id},'confirmed')">Confirm</button>` : ''}
+        ${b.status !== 'cancelled' ? `<button class="admin-action" onclick="updateStatus(${b.id},'cancelled')">Cancel</button>` : ''}
+        <button class="admin-action" onclick="notifyWA(${b.id})">Notify</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function updateStatus(id, status) {
+  const b = bookings.find(b => b.id === id);
+  if (b) { b.status = status; renderBookingsTable(); updateAdminStats(); showToast(`Booking ${status} ✦`); }
+}
+
+function notifyWA(id) {
+  const b = bookings.find(b => b.id === id);
+  if (!b) return;
+  const msg = encodeURIComponent(`Hi ${b.fname}! ✨ Your appointment with Nails by Rey is confirmed for ${b.date} at ${b.time}. Service: ${b.service.split(' —')[0]}. See you soon! — Rey 💅`);
+  window.open(`https://wa.me/${b.phone.replace(/\D/g,'')}?text=${msg}`, '_blank');
+}
+
+function searchBookings(val) { renderBookingsTable(val); }
+
+// ─── CUSTOMERS TABLE ───────────────────────────────────────
+function renderCustomersTable() {
+  const map = {};
+  bookings.forEach(b => {
+    const key = b.phone;
+    if (!map[key]) map[key] = { name: `${b.fname} ${b.lname}`, phone: b.phone, email: b.email, visits: 0, last: '', spent: 0 };
+    map[key].visits++;
+    if (!map[key].last || b.date > map[key].last) map[key].last = b.service.split(' —')[0];
+    const m = b.service.match(/RM (\d+)/);
+    if (b.status === 'confirmed' && m) map[key].spent += parseInt(m[1]);
+  });
+  document.getElementById('customersTbody').innerHTML = Object.values(map).map(c => `
+    <tr>
+      <td>${c.name}</td>
+      <td>${c.phone}</td>
+      <td style="font-size:0.8rem;color:rgba(255,255,255,0.5)">${c.email}</td>
+      <td>${c.visits}</td>
+      <td>${c.last}</td>
+      <td>RM ${c.spent}</td>
+    </tr>
+  `).join('');
+}
+
+// ─── DISCOUNTS ADMIN ───────────────────────────────────────
+function renderDiscountsTable() {
+  document.getElementById('discountsTbody').innerHTML = discountsData.map((d, i) => `
+    <tr>
+      <td style="font-family:monospace;color:var(--gold-light)">${d.code}</td>
+      <td>${d.label}</td>
+      <td>${d.pct}</td>
+      <td>${d.used}</td>
+      <td><button class="admin-action" onclick="removeDiscount(${i})">Remove</button></td>
+    </tr>
+  `).join('');
+}
+
+function addDiscount() {
+  const code = document.getElementById('dc-code').value.trim().toUpperCase();
+  const label = document.getElementById('dc-label').value.trim();
+  const pct = document.getElementById('dc-pct').value;
+  if (!code || !label) { showToast('Please enter code and label'); return; }
+  discountsData.push({ code, label, pct, used: 0 });
+  renderDiscountsTable();
+  renderDiscountsSection();
+  document.getElementById('dc-code').value = '';
+  document.getElementById('dc-label').value = '';
+  showToast('Discount added ✦');
+}
+
+function removeDiscount(i) {
+  discountsData.splice(i, 1);
+  renderDiscountsTable();
+  renderDiscountsSection();
+  showToast('Discount removed');
+}
+
+// ─── TABS ──────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+// ─── TOAST ─────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─── INIT ──────────────────────────────────────────────────
+renderGallery();
+renderDiscountsSection();
+renderBookingsTable();
+renderCustomersTable();
+renderDiscountsTable();
+updateAdminStats();
+document.getElementById('bdate').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
