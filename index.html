@@ -81,6 +81,7 @@
     padding: 0 3rem; height: 64px;
   }
   .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; letter-spacing: 0.05em; color: var(--rose-dark); }
+  .nav-logo a { color: inherit; text-decoration: none; }
   .nav-logo span { color: var(--gold); font-style: italic; }
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
@@ -135,11 +136,13 @@
   .section-header .section-desc { margin: 0 auto; }
   .container { max-width: 1100px; margin: 0 auto; }
 
-  /* GALLERY */
+  /* GALLERY TABS */
+  .gallery-tabs { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .gallery-tab { padding: 0.5rem 1.5rem; border-radius: 2rem; border: 1px solid var(--card-border); background: transparent; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; color: var(--muted); }
+  .gallery-tab.active, .gallery-tab:hover { background: var(--rose-dark); color: white; border-color: var(--rose-dark); }
+
+  /* GALLERY GRID */
   #gallery { background: var(--white); }
-  .gallery-filter { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
-  .filter-btn { padding: 0.4rem 1.2rem; border-radius: 2rem; border: 1px solid var(--card-border); background: transparent; font-size: 0.8rem; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
-  .filter-btn.active, .filter-btn:hover { background: var(--rose-dark); color: white; border-color: var(--rose-dark); }
   .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
   .gallery-item {
     aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
@@ -238,6 +241,7 @@
   .status-confirmed { background: rgba(100,180,120,0.2); color: #7edd9a; }
   .status-pending { background: rgba(201,169,110,0.2); color: var(--gold-light); }
   .status-cancelled { background: rgba(200,80,80,0.2); color: #f5a0a0; }
+  .status-completed { background: rgba(100,120,200,0.2); color: #b3c5ff; }
   .admin-action { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); padding: 0.2rem 0.7rem; border-radius: 2rem; font-size: 0.72rem; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-right: 0.3rem; transition: all 0.15s; }
   .admin-action:hover { border-color: var(--rose); color: var(--rose); }
   .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
@@ -252,6 +256,7 @@
   .discount-form input::placeholder { color: rgba(255,255,255,0.3); }
   .discount-form select option { background: #2a1f1f; color: white; }
   .admin-add-btn { padding: 0.6rem 1.2rem; background: var(--rose-dark); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; white-space: nowrap; }
+  .admin-export-btn { margin-left: 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 0.4rem 1rem; border-radius: 2rem; color: rgba(255,255,255,0.8); font-size: 0.75rem; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
   /* FOOTER */
   footer { background: var(--rose-dark); color: rgba(255,255,255,0.7); text-align: center; padding: 2rem; font-size: 0.82rem; }
@@ -260,39 +265,6 @@
   /* TOAST */
   .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--rose-dark); color: white; padding: 0.9rem 1.5rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 30px rgba(0,0,0,0.2); transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; }
   .toast.show { transform: translateY(0); opacity: 1; }
-
-  /* ADMIN LOGIN GATE */
-  .admin-gate { text-align: center; padding: 3rem 1rem; }
-  .admin-gate h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: white; margin-bottom: 0.5rem; }
-  .admin-gate p { color: rgba(255,255,255,0.45); font-size: 0.85rem; margin-bottom: 1.5rem; }
-  .admin-gate input { padding: 0.65rem 1rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; width: 240px; margin-right: 0.5rem; letter-spacing: 0.1em; }
-  .admin-gate button { padding: 0.65rem 1.4rem; background: var(--rose-dark); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; cursor: pointer; }
-  .admin-gate .gate-error { color: #f5a0a0; font-size: 0.8rem; margin-top: 0.6rem; display: none; }
-
-  /* GALLERY MANAGER */
-  .gallery-upload-zone {
-    border: 2px dashed rgba(255,255,255,0.15); border-radius: 14px; padding: 2.5rem;
-    text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 1.5rem;
-  }
-  .gallery-upload-zone:hover, .gallery-upload-zone.dragover { border-color: var(--rose); }
-  .gallery-upload-zone input[type=file] { display: none; }
-  .upload-icon { font-size: 2rem; margin-bottom: 0.6rem; }
-  .upload-label { font-size: 0.88rem; color: rgba(255,255,255,0.5); }
-  .upload-label span { color: var(--rose); text-decoration: underline; cursor: pointer; }
-  .upload-meta { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
-  .upload-meta input, .upload-meta select { padding: 0.55rem 0.9rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; outline: none; flex: 1; min-width: 120px; }
-  .upload-meta input::placeholder { color: rgba(255,255,255,0.3); }
-  .upload-meta select option { background: #2a1f1f; }
-  .upload-preview { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); display: none; }
-  .gallery-mgr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-  .gallery-mgr-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 1; background: rgba(255,255,255,0.05); }
-  .gallery-mgr-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .gallery-mgr-info { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); padding: 0.4rem 0.6rem; }
-  .gallery-mgr-name { font-size: 0.72rem; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .gallery-mgr-tag { font-size: 0.65rem; color: var(--rose); }
-  .gallery-mgr-del { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: rgba(180,50,50,0.85); color: white; border: none; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
-  .gallery-mgr-item:hover .gallery-mgr-del { opacity: 1; }
-  .gallery-mgr-empty { color: rgba(255,255,255,0.3); font-size: 0.88rem; text-align: center; padding: 2rem; }
 
   @media (max-width: 768px) {
     nav { padding: 0 1.2rem; }
@@ -307,7 +279,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Nails <span>by Rey</span></div>
+  <div class="nav-logo"><a href="#home">Nails <span>by Rey</span></a></div>
   <ul class="nav-links">
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#pricing">Pricing</a></li>
@@ -348,7 +320,7 @@
   <span style="color:rgba(255,255,255,0.4);font-size:0.78rem;">📍 Kajang (Homebased)</span>
 </div>
 
-<!-- GALLERY -->
+<!-- GALLERY (tabs instead of filters) -->
 <section id="gallery">
   <div class="container">
     <div class="section-header">
@@ -356,17 +328,14 @@
       <h2 class="section-title reveal reveal-delay-1">The Gallery</h2>
       <p class="section-desc reveal reveal-delay-2">A curated collection of sets — each one unique, intentional, and made with love.</p>
     </div>
-    <div class="gallery-filter reveal reveal-delay-3">
-      <button class="filter-btn active" onclick="filterGallery('all', this)">All</button>
-      <button class="filter-btn" onclick="filterGallery('gel', this)">Gel</button>
-      <button class="filter-btn" onclick="filterGallery('acrylic', this)">Acrylic</button>
-      <button class="filter-btn" onclick="filterGallery('nail-art', this)">Nail Art</button>
-      <button class="filter-btn" onclick="filterGallery('french', this)">French</button>
-      <button class="filter-btn" onclick="filterGallery('ombre', this)">Ombré</button>
+    <div class="gallery-tabs reveal reveal-delay-3" id="galleryTabs">
+      <button class="gallery-tab active" data-tag="nail-art">Nail Art</button>
+      <button class="gallery-tab" data-tag="gel">Gel</button>
+      <button class="gallery-tab" data-tag="acrylic">Acrylic</button>
+      <button class="gallery-tab" data-tag="french">French</button>
+      <button class="gallery-tab" data-tag="ombre">Ombré</button>
     </div>
-    <div class="gallery-grid" id="galleryGrid">
-      <!-- populated by JS -->
-    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
   </div>
 </section>
 
@@ -577,7 +546,7 @@
         <button onclick="checkAdminPw()">Enter</button>
       </div>
       <div class="gate-error" id="gateError">Incorrect password. Try again.</div>
-      <p style="margin-top:1.2rem;font-size:0.75rem;color:rgba(255,255,255,0.25);">Default password: <code style="color:var(--rose)">nailsbyrey2025</code> — change this in the code before publishing.</p>
+      <p style="margin-top:1.2rem;font-size:0.75rem;color:rgba(255,255,255,0.25);">Default password: <code style="color:var(--rose)">nailsbyrey2025</code> — change before publishing.</p>
     </div>
 
     <!-- DASHBOARD (hidden until logged in) -->
@@ -589,6 +558,7 @@
         <div class="admin-stat"><div class="admin-stat-val" id="stat-total">0</div><div class="admin-stat-label">Total Bookings</div></div>
         <div class="admin-stat"><div class="admin-stat-val" id="stat-confirmed">0</div><div class="admin-stat-label">Confirmed</div></div>
         <div class="admin-stat"><div class="admin-stat-val" id="stat-pending">0</div><div class="admin-stat-label">Pending</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="stat-completed">0</div><div class="admin-stat-label">Completed</div></div>
         <div class="admin-stat"><div class="admin-stat-val" id="stat-revenue">RM 0</div><div class="admin-stat-label">Est. Revenue</div></div>
         <div class="admin-stat"><div class="admin-stat-val" id="stat-photos">0</div><div class="admin-stat-label">Gallery Photos</div></div>
       </div>
@@ -601,12 +571,15 @@
 
       <!-- BOOKINGS TAB -->
       <div class="admin-panel active" id="tab-bookings">
-        <div class="admin-search">
-          <input type="text" placeholder="Search by name, service, date..." oninput="searchBookings(this.value)" id="bookingSearch">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <div class="admin-search" style="margin-bottom:0; flex:1;">
+            <input type="text" placeholder="Search by name, service, date..." oninput="searchBookings(this.value)" id="bookingSearch">
+          </div>
+          <button class="admin-export-btn" onclick="exportCSV()">📥 Export CSV</button>
         </div>
         <table class="admin-table" id="bookingsTable">
           <thead><tr>
-            <th>Customer</th><th>Service</th><th>Date & Time</th><th>Contact</th><th>Status</th><th>Actions</th>
+            <th>Customer</th><th>Service</th><th>Date & Time</th><th>Contact</th><th>Status</th><th>Final Price</th><th>Actions</th>
           </tr></thead>
           <tbody id="bookingsTbody"></tbody>
         </table>
@@ -680,9 +653,9 @@
 <script>
 // ─── DATA STORE ────────────────────────────────────────────
 let bookings = [
-  { id: 1, fname: 'Aisha', lname: 'Karim', phone: '+60176445338', email: 'aisha@email.com', service: 'Manicure + Gel — RM 30', date: '2025-06-12', time: '2:00 PM', notes: 'Light pink please', status: 'confirmed', code: 'NEWCLIENT10' },
-  { id: 2, fname: 'Nura', lname: 'Halim', phone: '+601123456789', email: 'nura@email.com', service: 'Manicure — RM 10', date: '2025-06-13', time: '11:00 AM', notes: '', status: 'pending', code: '' },
-  { id: 3, fname: 'Siti', lname: 'Rahman', phone: '+601098765432', email: 'siti@email.com', service: 'Nail Art / Cat Eye / French — RM 10–30 add-on', date: '2025-06-14', time: '3:00 PM', notes: 'Cat eye, dark burgundy', status: 'confirmed', code: '' },
+  { id: 1, fname: 'Aisha', lname: 'Karim', phone: '+60176445338', email: 'aisha@email.com', service: 'Manicure + Gel — RM 30', date: '2025-06-12', time: '2:00 PM', notes: 'Light pink please', status: 'confirmed', code: 'NEWCLIENT10', finalService: '', finalPrice: null },
+  { id: 2, fname: 'Nura', lname: 'Halim', phone: '+601123456789', email: 'nura@email.com', service: 'Manicure — RM 10', date: '2025-06-13', time: '11:00 AM', notes: '', status: 'pending', code: '', finalService: '', finalPrice: null },
+  { id: 3, fname: 'Siti', lname: 'Rahman', phone: '+601098765432', email: 'siti@email.com', service: 'Nail Art / Cat Eye / French — RM 10–30 add-on', date: '2025-06-14', time: '3:00 PM', notes: 'Cat eye, dark burgundy', status: 'confirmed', code: '', finalService: '', finalPrice: null },
 ];
 
 let discountsData = [
@@ -693,6 +666,7 @@ let discountsData = [
 ];
 
 const ADMIN_PASSWORD = 'nailsbyrey2025';
+const ADMIN_WA = '60176445338'; // Rey's WhatsApp for admin notification
 
 // ─── ADMIN LOGIN ───────────────────────────────────────────
 function checkAdminPw() {
@@ -736,12 +710,15 @@ function saveGalleryPhotos(photos) {
   try { localStorage.setItem('nbr_gallery', JSON.stringify(photos)); } catch { showToast('Storage full — try smaller images'); }
 }
 
-// ─── GALLERY (public) ──────────────────────────────────────
-function renderGallery(filter = 'all') {
+// ─── GALLERY (public, tab‑based) ─────────────────────────
+let currentGalleryTag = 'nail-art';
+
+function renderGallery(tag = currentGalleryTag) {
+  currentGalleryTag = tag;
   const grid = document.getElementById('galleryGrid');
   const uploaded = loadGalleryPhotos();
   const combined = [...uploaded, ...PLACEHOLDER_ITEMS];
-  const items = filter === 'all' ? combined : combined.filter(i => i.tag === filter);
+  const items = combined.filter(i => i.tag === tag);
   grid.innerHTML = items.map(i => i.isPlaceholder ? `
     <div class="gallery-item" style="background:${i.bg}">
       <div class="gallery-item-inner">
@@ -764,11 +741,14 @@ function renderGallery(filter = 'all') {
   `).join('');
 }
 
-function filterGallery(tag, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderGallery(tag);
-}
+// Tab switching for gallery
+document.getElementById('galleryTabs').addEventListener('click', (e) => {
+  const tab = e.target.closest('.gallery-tab');
+  if (!tab) return;
+  document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  renderGallery(tab.dataset.tag);
+});
 
 // ─── GALLERY MANAGER (admin) ───────────────────────────────
 let pendingFiles = [];
@@ -896,6 +876,17 @@ function submitBooking() {
   const bdate = document.getElementById('bdate').value;
   if (!fname || !phone || !service || !bdate) { showToast('Please fill in all required fields ✦'); return; }
 
+  // Discount code validation
+  let code = document.getElementById('dcode').value.trim().toUpperCase();
+  if (code) {
+    const validation = validateDiscountCode(code, phone, document.getElementById('email').value.trim());
+    if (!validation.valid) {
+      showToast(validation.msg + ' Code cleared.');
+      code = '';
+      document.getElementById('dcode').value = '';
+    }
+  }
+
   const newBooking = {
     id: bookings.length + 1,
     fname, lname: document.getElementById('lname').value.trim(),
@@ -903,7 +894,9 @@ function submitBooking() {
     service, date: bdate, time: document.getElementById('btime').value,
     notes: document.getElementById('notes').value.trim(),
     status: 'pending',
-    code: document.getElementById('dcode').value.trim()
+    code: code,
+    finalService: '',
+    finalPrice: null
   };
 
   bookings.push(newBooking);
@@ -914,6 +907,34 @@ function submitBooking() {
   updateAdminStats();
   renderBookingsTable();
   renderCustomersTable();
+
+  // Notify admin via WhatsApp automatically
+  const adminMsg = encodeURIComponent(`🔔 New Booking Request\n\n${fname} ${newBooking.lname}\n${service}\n${bdate} at ${newBooking.time}\nPhone: ${phone}\nCode: ${code || 'none'}\nNotes: ${newBooking.notes || 'none'}`);
+  window.open(`https://wa.me/${ADMIN_WA}?text=${adminMsg}`, '_blank');
+}
+
+function validateDiscountCode(code, phone, email) {
+  const normPhone = phone.replace(/\D/g, '');
+  const normEmail = email.toLowerCase();
+  // New client check
+  if (code === 'NEWCLIENT10') {
+    const exists = bookings.some(b => {
+      const bPhone = (b.phone || '').replace(/\D/g, '');
+      const bEmail = (b.email || '').toLowerCase();
+      return (bPhone === normPhone && normPhone !== '') || (bEmail === normEmail && normEmail !== '');
+    });
+    if (exists) return { valid: false, msg: 'This code is for new clients only. You already have a previous booking.' };
+  }
+  // Loyalty check
+  if (code === 'LOYAL30') {
+    const count = bookings.filter(b => {
+      const bPhone = (b.phone || '').replace(/\D/g, '');
+      return bPhone === normPhone && (b.status === 'confirmed' || b.status === 'completed');
+    }).length;
+    if (count < 5) return { valid: false, msg: 'You need at least 5 previous visits to use the loyalty code.' };
+  }
+  // BDAY15 and REFER20 are always allowed (manual verification)
+  return { valid: true };
 }
 
 // ─── ADMIN STATS ───────────────────────────────────────────
@@ -921,11 +942,10 @@ function updateAdminStats() {
   document.getElementById('stat-total').textContent = bookings.length;
   document.getElementById('stat-confirmed').textContent = bookings.filter(b => b.status === 'confirmed').length;
   document.getElementById('stat-pending').textContent = bookings.filter(b => b.status === 'pending').length;
-  const rev = bookings.filter(b => b.status === 'confirmed').reduce((acc, b) => {
-    const m = b.service.match(/RM (\d+)/);
-    return acc + (m ? parseInt(m[1]) : 0);
-  }, 0);
-  document.getElementById('stat-revenue').textContent = 'RM ' + rev;
+  document.getElementById('stat-completed').textContent = bookings.filter(b => b.status === 'completed').length;
+  const rev = bookings.filter(b => b.status === 'completed' && b.finalPrice)
+    .reduce((acc, b) => acc + parseFloat(b.finalPrice), 0);
+  document.getElementById('stat-revenue').textContent = 'RM ' + rev.toFixed(0);
 }
 
 // ─── BOOKINGS TABLE ────────────────────────────────────────
@@ -941,13 +961,46 @@ function renderBookingsTable(filter = '') {
       <td>${b.date} · ${b.time}</td>
       <td style="font-size:0.78rem;color:rgba(255,255,255,0.5)">${b.phone}</td>
       <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+      <td>${b.finalPrice ? 'RM ' + b.finalPrice : '—'}</td>
       <td>
         ${b.status === 'pending' ? `<button class="admin-action" onclick="updateStatus(${b.id},'confirmed')">Confirm</button>` : ''}
+        ${b.status === 'confirmed' ? `<button class="admin-action" onclick="completeBooking(${b.id})">Complete</button>` : ''}
         ${b.status !== 'cancelled' ? `<button class="admin-action" onclick="updateStatus(${b.id},'cancelled')">Cancel</button>` : ''}
+        <button class="admin-action" onclick="editBooking(${b.id})">Edit</button>
         <button class="admin-action" onclick="notifyWA(${b.id})">Notify</button>
       </td>
     </tr>
   `).join('');
+}
+
+function editBooking(id) {
+  const b = bookings.find(b => b.id === id);
+  if (!b) return;
+  const newDate = prompt('Enter new date (YYYY-MM-DD)', b.date);
+  if (!newDate) return;
+  const newTime = prompt('Enter new time (e.g. 2:00 PM)', b.time);
+  if (!newTime) return;
+  const newService = prompt('Enter new service description', b.service);
+  if (!newService) return;
+  b.date = newDate; b.time = newTime; b.service = newService;
+  renderBookingsTable();
+  showToast('Booking edited ✦');
+}
+
+function completeBooking(id) {
+  const b = bookings.find(b => b.id === id);
+  if (!b) return;
+  const finalService = prompt('Final service delivered (e.g. Manicure + Gel + nail art)', b.service);
+  if (finalService === null) return;
+  const priceStr = prompt('Final price paid (RM)', '');
+  const finalPrice = parseFloat(priceStr);
+  if (isNaN(finalPrice)) return showToast('Invalid price');
+  b.finalService = finalService;
+  b.finalPrice = finalPrice;
+  b.status = 'completed';
+  renderBookingsTable();
+  updateAdminStats();
+  showToast('Booking marked as completed ✦');
 }
 
 function updateStatus(id, status) {
@@ -964,6 +1017,21 @@ function notifyWA(id) {
 
 function searchBookings(val) { renderBookingsTable(val); }
 
+function exportCSV() {
+  const headers = ['ID','First','Last','Phone','Email','Service','Date','Time','Notes','Discount','Status','Final Service','Final Price'];
+  const rows = bookings.map(b => [
+    b.id, b.fname, b.lname, b.phone, b.email, b.service, b.date, b.time,
+    b.notes, b.code, b.status, b.finalService || '', b.finalPrice || ''
+  ]);
+  const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'nailsbyrey_bookings.csv'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exported ✦');
+}
+
 // ─── CUSTOMERS TABLE ───────────────────────────────────────
 function renderCustomersTable() {
   const map = {};
@@ -972,8 +1040,7 @@ function renderCustomersTable() {
     if (!map[key]) map[key] = { name: `${b.fname} ${b.lname}`, phone: b.phone, email: b.email, visits: 0, last: '', spent: 0 };
     map[key].visits++;
     if (!map[key].last || b.date > map[key].last) map[key].last = b.service.split(' —')[0];
-    const m = b.service.match(/RM (\d+)/);
-    if (b.status === 'confirmed' && m) map[key].spent += parseInt(m[1]);
+    if (b.status === 'completed' && b.finalPrice) map[key].spent += b.finalPrice;
   });
   document.getElementById('customersTbody').innerHTML = Object.values(map).map(c => `
     <tr>
@@ -982,7 +1049,7 @@ function renderCustomersTable() {
       <td style="font-size:0.8rem;color:rgba(255,255,255,0.5)">${c.email}</td>
       <td>${c.visits}</td>
       <td>${c.last}</td>
-      <td>RM ${c.spent}</td>
+      <td>RM ${c.spent.toFixed(0)}</td>
     </tr>
   `).join('');
 }
@@ -1037,21 +1104,17 @@ function showToast(msg) {
 }
 
 // ══════════════════════════════════════════════════════════
-// ★ NEW: SCROLL REVEAL OBSERVER & SCROLLSPY ★
+// ★ SCROLL REVEAL OBSERVER & SCROLLSPY ★
 // ══════════════════════════════════════════════════════════
 (function() {
-  // ── Scroll Reveal ──
   const revealEls = document.querySelectorAll('.reveal');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+      if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
   revealEls.forEach(el => revealObserver.observe(el));
 
-  // ── Scrollspy (active nav link) ──
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a:not(.nav-book)');
   function onScroll() {
@@ -1066,17 +1129,15 @@ function showToast(msg) {
     });
     navLinks.forEach(link => {
       link.classList.remove('active');
-      if (link.getAttribute('href') === '#' + current) {
-        link.classList.add('active');
-      }
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // initial call
+  onScroll();
 })();
 
 // ─── INIT ──────────────────────────────────────────────────
-renderGallery();
+renderGallery(); // default tab 'nail-art'
 renderDiscountsSection();
 updateAdminStats();
 document.getElementById('bdate').min = new Date().toISOString().split('T')[0];
