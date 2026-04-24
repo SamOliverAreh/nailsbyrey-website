@@ -89,6 +89,42 @@
   .nav-book { background: var(--rose-dark); color: white !important; padding: 0.45rem 1.2rem; border-radius: 2rem; font-size: 0.78rem !important; }
   .nav-book:hover { background: var(--rose-deep); color: white !important; }
 
+  /* Hamburger button */
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--rose-dark);
+    padding: 0.5rem;
+    z-index: 101;
+  }
+
+  /* Mobile nav */
+  @media (max-width: 768px) {
+    nav { padding: 0 1.2rem; }
+    .hamburger { display: block; }
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(253,246,240,0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      flex-direction: column;
+      gap: 0;
+      padding: 1rem 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    }
+    .nav-links.show { display: flex; }
+    .nav-links li { text-align: center; }
+    .nav-links a { display: block; padding: 0.8rem 1rem; }
+    .nav-book { display: inline-block; margin: 0.5rem auto; width: fit-content; }
+  }
+
   /* HERO */
   .hero {
     min-height: 100vh; display: flex; align-items: center; justify-content: center;
@@ -349,12 +385,20 @@
   .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--rose-dark); color: white; padding: 0.9rem 1.5rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 30px rgba(0,0,0,0.2); transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; }
   .toast.show { transform: translateY(0); opacity: 1; }
 
+  /* Mobile adjustments */
   @media (max-width: 768px) {
-    nav { padding: 0 1.2rem; }
-    .nav-links { display: none; }
     .booking-wrap { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
     .discount-form { grid-template-columns: 1fr 1fr; }
+    .admin-tabs { justify-content: center; }
+    .admin-export-btn { margin-left: 0; margin-top: 0.5rem; }
+    .admin-search { flex-direction: column; }
+    .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .upload-meta { flex-direction: column; align-items: stretch; }
+    .upload-meta input, .upload-meta select, .upload-meta button { min-width: auto; }
+    .gallery-upload-zone { padding: 2rem 1rem; }
+    .admin-gate .pw-row { flex-direction: column; align-items: stretch; }
+    .admin-gate input { width: 100%; }
   }
 </style>
 </head>
@@ -363,7 +407,8 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo"><a href="#home">Nails <span>by Rey</span></a></div>
-  <ul class="nav-links">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">☰</button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#discounts">Offers</a></li>
@@ -431,6 +476,7 @@
       <p class="section-desc reveal reveal-delay-2">Transparent pricing for every service. All sets include nail prep, cuticle care & aftercare advice.</p>
     </div>
     <div class="pricing-grid">
+      <!-- pricing cards unchanged -->
       <div class="pricing-card reveal reveal-delay-1">
         <div class="pricing-icon">💅</div>
         <div class="pricing-name">Manicure</div>
@@ -653,18 +699,20 @@
 
       <!-- BOOKINGS TAB -->
       <div class="admin-panel active" id="tab-bookings">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;" class="table-header-row">
           <div class="admin-search" style="margin-bottom:0; flex:1;">
             <input type="text" placeholder="Search by name, service, date..." oninput="searchBookings(this.value)" id="bookingSearch">
           </div>
           <button class="admin-export-btn" onclick="exportBookingsCSV()">📥 Export CSV</button>
         </div>
-        <table class="admin-table" id="bookingsTable">
-          <thead><tr>
-            <th>Customer</th><th>Service</th><th>Date & Time</th><th>Contact</th><th>Status</th><th>Final Price</th><th>Actions</th>
-          </tr></thead>
-          <tbody id="bookingsTbody"></tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="admin-table" id="bookingsTable">
+            <thead><tr>
+              <th>Customer</th><th>Service</th><th>Date & Time</th><th>Contact</th><th>Status</th><th>Final Price</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="bookingsTbody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- CUSTOMERS TAB -->
@@ -672,12 +720,14 @@
         <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
           <button class="admin-export-btn" onclick="exportCustomersCSV()">📥 Export CSV</button>
         </div>
-        <table class="admin-table">
-          <thead><tr>
-            <th>Name</th><th>Phone</th><th>Email</th><th>Visits</th><th>Last Service</th><th>Total Spent</th>
-          </tr></thead>
-          <tbody id="customersTbody"></tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Name</th><th>Phone</th><th>Email</th><th>Visits</th><th>Last Service</th><th>Total Spent</th>
+            </tr></thead>
+            <tbody id="customersTbody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- GALLERY MANAGER TAB -->
@@ -718,10 +768,12 @@
           </select>
           <button class="admin-add-btn" onclick="addDiscount()">+ Add</button>
         </div>
-        <table class="admin-table">
-          <thead><tr><th>Code</th><th>Label</th><th>Discount</th><th>Used</th><th>Actions</th></tr></thead>
-          <tbody id="discountsTbody"></tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead><tr><th>Code</th><th>Label</th><th>Discount</th><th>Used</th><th>Actions</th></tr></thead>
+            <tbody id="discountsTbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -736,22 +788,50 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── DATA STORE ────────────────────────────────────────────
-let bookings = [
-  { id: 1, fname: 'Aisha', lname: 'Karim', phone: '+60176445338', email: 'aisha@email.com', service: 'Manicure + Gel — RM 30', date: '2025-06-12', time: '2:00 PM', notes: 'Light pink please', status: 'confirmed', code: 'NEWCLIENT10', finalService: '', finalPrice: null },
-  { id: 2, fname: 'Nura', lname: 'Halim', phone: '+601123456789', email: 'nura@email.com', service: 'Manicure — RM 10', date: '2025-06-13', time: '11:00 AM', notes: '', status: 'pending', code: '', finalService: '', finalPrice: null },
-  { id: 3, fname: 'Siti', lname: 'Rahman', phone: '+601098765432', email: 'siti@email.com', service: 'Nail Art / Cat Eye / French — RM 10–30 add-on', date: '2025-06-14', time: '3:00 PM', notes: 'Cat eye, dark burgundy', status: 'confirmed', code: '', finalService: '', finalPrice: null },
-];
+// ─── PERSISTENCE HELPERS ──────────────────────────────────
+const STORAGE_BOOKINGS = 'nbr_bookings';
+const STORAGE_DISCOUNTS = 'nbr_discounts';
 
-let discountsData = [
-  { code: 'NEWCLIENT10', label: 'New Client Welcome', pct: '10%', used: 3 },
-  { code: 'BDAY15', label: 'Birthday Special', pct: '15%', used: 1 },
-  { code: 'REFER20', label: 'Referral Reward', pct: '20%', used: 0 },
-  { code: 'LOYAL30', label: 'Loyal Customer (5+ visits)', pct: '30%', used: 2 },
-];
+function loadBookings() {
+  const saved = localStorage.getItem(STORAGE_BOOKINGS);
+  if (saved) {
+    try { return JSON.parse(saved); } catch { return []; }
+  }
+  // Initial sample data
+  return [
+    { id: 1, fname: 'Aisha', lname: 'Karim', phone: '+60176445338', email: 'aisha@email.com', service: 'Manicure + Gel — RM 30', date: '2025-06-12', time: '2:00 PM', notes: 'Light pink please', status: 'confirmed', code: 'NEWCLIENT10', finalService: '', finalPrice: null },
+    { id: 2, fname: 'Nura', lname: 'Halim', phone: '+601123456789', email: 'nura@email.com', service: 'Manicure — RM 10', date: '2025-06-13', time: '11:00 AM', notes: '', status: 'pending', code: '', finalService: '', finalPrice: null },
+    { id: 3, fname: 'Siti', lname: 'Rahman', phone: '+601098765432', email: 'siti@email.com', service: 'Nail Art / Cat Eye / French — RM 10–30 add-on', date: '2025-06-14', time: '3:00 PM', notes: 'Cat eye, dark burgundy', status: 'confirmed', code: '', finalService: '', finalPrice: null },
+  ];
+}
+
+function loadDiscounts() {
+  const saved = localStorage.getItem(STORAGE_DISCOUNTS);
+  if (saved) {
+    try { return JSON.parse(saved); } catch { return []; }
+  }
+  return [
+    { code: 'NEWCLIENT10', label: 'New Client Welcome', pct: '10%', used: 3 },
+    { code: 'BDAY15', label: 'Birthday Special', pct: '15%', used: 1 },
+    { code: 'REFER20', label: 'Referral Reward', pct: '20%', used: 0 },
+    { code: 'LOYAL30', label: 'Loyal Customer (5+ visits)', pct: '30%', used: 2 },
+  ];
+}
+
+function saveBookings() {
+  localStorage.setItem(STORAGE_BOOKINGS, JSON.stringify(bookings));
+}
+
+function saveDiscounts() {
+  localStorage.setItem(STORAGE_DISCOUNTS, JSON.stringify(discountsData));
+}
+
+// ─── GLOBAL DATA ──────────────────────────────────────────
+let bookings = loadBookings();
+let discountsData = loadDiscounts();
 
 const ADMIN_PASSWORD = 'nailsbyrey2025';
-const ADMIN_WA = '60176445338'; // Your WhatsApp for notifications
+const ADMIN_WA = '60176445338';
 
 // ─── ADMIN LOGIN ───────────────────────────────────────────
 function checkAdminPw() {
@@ -778,6 +858,17 @@ if (sessionStorage.getItem('nbrAdmin')) {
   });
 }
 
+// ─── HAMBURGER MENU ───────────────────────────────────────
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navLinks = document.getElementById('navLinks');
+hamburgerBtn.addEventListener('click', () => {
+  navLinks.classList.toggle('show');
+});
+// Close menu when a link is clicked
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => navLinks.classList.remove('show'));
+});
+
 // ─── GALLERY DATA (localStorage) ──────────────────────────
 const PLACEHOLDER_ITEMS = [
   { id: 'p1', tag: 'nail-art', label: 'Cherry Blossom', emoji: '🌸', bg: '#faeaea', isPlaceholder: true },
@@ -792,7 +883,7 @@ function loadGalleryPhotos() {
   try { return JSON.parse(localStorage.getItem('nbr_gallery') || '[]'); } catch { return []; }
 }
 function saveGalleryPhotos(photos) {
-  try { localStorage.setItem('nbr_gallery', JSON.stringify(photos)); } catch { showToast('Storage full — try smaller images'); }
+  localStorage.setItem('nbr_gallery', JSON.stringify(photos));
 }
 
 // ─── GALLERY (public, tab‑based) ─────────────────────────
@@ -960,7 +1051,6 @@ function submitBooking() {
   const bdate = document.getElementById('bdate').value;
   if (!fname || !phone || !service || !bdate) { showToast('Please fill in all required fields ✦'); return; }
 
-  // Discount code validation
   let code = document.getElementById('dcode').value.trim().toUpperCase();
   if (code) {
     const validation = validateDiscountCode(code, phone, document.getElementById('email').value.trim());
@@ -984,6 +1074,7 @@ function submitBooking() {
   };
 
   bookings.push(newBooking);
+  saveBookings(); // PERSIST
   document.getElementById('bookingForm').style.display = 'none';
   const s = document.getElementById('bookingSuccess');
   s.style.display = 'block';
@@ -992,7 +1083,6 @@ function submitBooking() {
   renderBookingsTable();
   renderCustomersTable();
 
-  // Notify admin via WhatsApp
   const adminMsg = encodeURIComponent(`🔔 New Booking Request\n\n${fname} ${newBooking.lname}\n${service}\n${bdate} at ${newBooking.time}\nPhone: ${phone}\nCode: ${code || 'none'}\nNotes: ${newBooking.notes || 'none'}`);
   window.open(`https://wa.me/${ADMIN_WA}?text=${adminMsg}`, '_blank');
 }
@@ -1056,6 +1146,7 @@ function editBooking(id) {
   const newService = prompt('Enter new service description', b.service);
   if (!newService) return;
   b.date = newDate; b.time = newTime; b.service = newService;
+  saveBookings();
   renderBookingsTable();
   showToast('Booking edited ✦');
 }
@@ -1071,6 +1162,7 @@ function completeBooking(id) {
   b.finalService = finalService;
   b.finalPrice = finalPrice;
   b.status = 'completed';
+  saveBookings();
   renderBookingsTable();
   updateAdminStats();
   showToast('Booking marked as completed ✦');
@@ -1078,7 +1170,7 @@ function completeBooking(id) {
 
 function updateStatus(id, status) {
   const b = bookings.find(b => b.id === id);
-  if (b) { b.status = status; renderBookingsTable(); updateAdminStats(); showToast(`Booking ${status} ✦`); }
+  if (b) { b.status = status; saveBookings(); renderBookingsTable(); updateAdminStats(); showToast(`Booking ${status} ✦`); }
 }
 
 function notifyWA(id) {
@@ -1166,6 +1258,7 @@ function addDiscount() {
   const pct = document.getElementById('dc-pct').value;
   if (!code || !label) { showToast('Please enter code and label'); return; }
   discountsData.push({ code, label, pct, used: 0 });
+  saveDiscounts();
   renderDiscountsTable();
   renderDiscountsSection();
   document.getElementById('dc-code').value = '';
@@ -1175,6 +1268,7 @@ function addDiscount() {
 
 function removeDiscount(i) {
   discountsData.splice(i, 1);
+  saveDiscounts();
   renderDiscountsTable();
   renderDiscountsSection();
   showToast('Discount removed');
@@ -1230,7 +1324,7 @@ function showToast(msg) {
 })();
 
 // ─── INIT ──────────────────────────────────────────────────
-renderGallery(); // default tab 'nail-art'
+renderGallery();
 renderDiscountsSection();
 updateAdminStats();
 document.getElementById('bdate').min = new Date().toISOString().split('T')[0];
