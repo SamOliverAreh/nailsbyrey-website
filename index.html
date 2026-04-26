@@ -303,11 +303,12 @@
               <div class="multi-select-options" id="serviceOptions">
                 <label class="multi-option"><input type="checkbox" value="3D arts"> 3D arts</label>
                 <label class="multi-option"><input type="checkbox" value="Cat eye"> Cat eye</label>
+                <label class="multi-option"><input type="checkbox" value="Extensions"> Extensions</label>
                 <label class="multi-option"><input type="checkbox" value="French tips"> French tips</label>
                 <label class="multi-option"><input type="checkbox" value="Gel"> Gel</label>
                 <label class="multi-option"><input type="checkbox" value="Gel removal"> Gel removal</label>
                 <label class="multi-option"><input type="checkbox" value="Manicure"> Manicure</label>
-                <label class="multi-option"><input type="checkbox" value="Ombre"> Ombre</label>
+                <label class="multi-option"><input type="checkbox" value="Ombre"> Ombré</label>
               </div>
             </div>
           </div>
@@ -582,7 +583,7 @@ async function submitBooking() {
 
   // Auto-notify Rey via WhatsApp
   const msg = encodeURIComponent(
-    `New Booking Request!\n\nID: ${newId}\nName: ${fname} ${booking.lname}\nPhone: ${booking.phone}\nService: ${booking.service}\nDate: ${bdate} at ${btime}\nNotes: ${booking.notes||'—'}`
+    `New Booking Request for Nails by Rey!\n\nName: ${fname} ${booking.lname}\nPhone: ${booking.phone}\nService: ${booking.service}\nDate: ${bdate} at ${btime}\nNotes: ${booking.notes||'—'}`
   );
   window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
 }
