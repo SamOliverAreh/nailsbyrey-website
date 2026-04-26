@@ -6,131 +6,114 @@
 <title>Admin · Nails by Rey</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --rose:#f2c4ce; --rose-deep:#c97d8e; --rose-dark:#7a3a4a;
-    --gold:#c9a96e; --gold-light:#f0e4ca; --ink:#2a1f1f;
-    --cream:#fdf6f0; --blush:#faeaea;
+  :root{
+    --rose:#f2c4ce;--rose-deep:#c97d8e;--rose-dark:#7a3a4a;
+    --gold:#c9a96e;--gold-light:#f0e4ca;--ink:#2a1f1f;--cream:#fdf6f0;--blush:#faeaea;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'DM Sans',sans-serif; background:#1a1010; color:white; min-height:100vh; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:#1a1010;color:white;min-height:100vh;}
 
-  /* ── LOGIN GATE ── */
-  #gateWrap {
-    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;
-  }
-  .gate-card {
-    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-    border-radius:24px; padding:3rem 2.5rem; width:100%; max-width:420px; text-align:center;
-  }
-  .gate-logo { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:300; color:var(--rose); margin-bottom:0.3rem; }
-  .gate-logo span { color:var(--gold); font-style:italic; }
-  .gate-sub { font-size:0.82rem; color:rgba(255,255,255,0.35); margin-bottom:2rem; letter-spacing:0.05em; }
-  .gate-card h2 { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; color:white; margin-bottom:0.4rem; }
-  .gate-card p  { font-size:0.82rem; color:rgba(255,255,255,0.4); margin-bottom:1.8rem; }
-  .gate-input {
-    width:100%; padding:0.85rem 1.2rem; background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.12); border-radius:12px; color:white;
-    font-family:'DM Sans',sans-serif; font-size:1rem; outline:none; letter-spacing:0.08em;
-    margin-bottom:1rem; transition:border-color 0.2s;
-  }
-  .gate-input:focus { border-color:var(--rose); }
-  .gate-btn {
-    width:100%; padding:0.85rem; background:var(--rose-dark); color:white; border:none;
-    border-radius:12px; font-family:'DM Sans',sans-serif; font-size:0.95rem; cursor:pointer;
-    transition:background 0.2s;
-  }
-  .gate-btn:hover { background:var(--rose-deep); }
-  .gate-error { color:#f5a0a0; font-size:0.8rem; margin-top:0.8rem; display:none; }
-  .gate-hint  { font-size:0.72rem; color:rgba(255,255,255,0.2); margin-top:1.2rem; }
-  .gate-hint code { color:var(--rose); }
+  /* LOGIN */
+  #gateWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+  .gate-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:3rem 2.5rem;width:100%;max-width:420px;text-align:center;}
+  .gate-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--rose);margin-bottom:0.3rem;}
+  .gate-logo span{color:var(--gold);font-style:italic;}
+  .gate-sub{font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:2rem;letter-spacing:0.05em;}
+  .gate-card h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:white;margin-bottom:0.4rem;}
+  .gate-card p{font-size:0.82rem;color:rgba(255,255,255,0.4);margin-bottom:1.8rem;}
+  .gate-input{width:100%;padding:0.85rem 1.2rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:white;font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;letter-spacing:0.08em;margin-bottom:1rem;transition:border-color 0.2s;}
+  .gate-input:focus{border-color:var(--rose);}
+  .gate-btn{width:100%;padding:0.85rem;background:var(--rose-dark);color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;transition:background 0.2s;}
+  .gate-btn:hover{background:var(--rose-deep);}
+  .gate-error{color:#f5a0a0;font-size:0.8rem;margin-top:0.8rem;display:none;}
+  .gate-hint{font-size:0.72rem;color:rgba(255,255,255,0.2);margin-top:1.2rem;}
+  .gate-hint code{color:var(--rose);}
 
-  /* ── DASHBOARD ── */
-  #dashboard { display:none; }
-
-  .dash-header {
-    background:rgba(0,0,0,0.3); border-bottom:1px solid rgba(255,255,255,0.06);
-    padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
-  }
-  .dash-logo { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:300; color:var(--rose); }
-  .dash-logo span { color:var(--gold); font-style:italic; }
-  .dash-logo small { font-size:0.72rem; color:rgba(255,255,255,0.3); display:block; letter-spacing:0.08em; font-family:'DM Sans',sans-serif; }
-  .dash-actions { display:flex; align-items:center; gap:0.8rem; }
-  .dash-link { font-size:0.78rem; color:rgba(255,255,255,0.5); text-decoration:none; border:1px solid rgba(255,255,255,0.12); padding:0.35rem 0.9rem; border-radius:2rem; transition:all 0.2s; }
-  .dash-link:hover { color:white; border-color:rgba(255,255,255,0.3); }
-  .logout-btn { background:rgba(200,80,80,0.2); border:1px solid rgba(200,80,80,0.3); color:#f5a0a0; padding:0.35rem 0.9rem; border-radius:2rem; font-size:0.78rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
-  .logout-btn:hover { background:rgba(200,80,80,0.35); }
-
-  .dash-body { padding:2rem; max-width:1200px; margin:0 auto; }
+  /* DASHBOARD */
+  #dashboard{display:none;}
+  .dash-header{background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(255,255,255,0.06);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+  .dash-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--rose);}
+  .dash-logo span{color:var(--gold);font-style:italic;}
+  .dash-logo small{font-size:0.72rem;color:rgba(255,255,255,0.3);display:block;letter-spacing:0.08em;font-family:'DM Sans',sans-serif;}
+  .dash-actions{display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;}
+  .dash-link{font-size:0.78rem;color:rgba(255,255,255,0.5);text-decoration:none;border:1px solid rgba(255,255,255,0.12);padding:0.35rem 0.9rem;border-radius:2rem;transition:all 0.2s;}
+  .dash-link:hover{color:white;border-color:rgba(255,255,255,0.3);}
+  .logout-btn{background:rgba(200,80,80,0.2);border:1px solid rgba(200,80,80,0.3);color:#f5a0a0;padding:0.35rem 0.9rem;border-radius:2rem;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .logout-btn:hover{background:rgba(200,80,80,0.35);}
+  .dash-body{padding:2rem;max-width:1300px;margin:0 auto;}
 
   /* STATS */
-  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1rem; margin-bottom:2rem; }
-  .stat-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:1.2rem; text-align:center; }
-  .stat-val  { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--rose); }
-  .stat-label { font-size:0.7rem; color:rgba(255,255,255,0.4); margin-top:0.2rem; letter-spacing:0.05em; text-transform:uppercase; }
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin-bottom:2rem;}
+  .stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.2rem;text-align:center;}
+  .stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--rose);}
+  .stat-label{font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;letter-spacing:0.05em;text-transform:uppercase;}
 
   /* TABS */
-  .tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-  .tab-btn { padding:0.5rem 1.2rem; border-radius:2rem; border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.5); font-size:0.8rem; cursor:pointer; background:transparent; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
-  .tab-btn.active { background:var(--rose-dark); color:white; border-color:var(--rose-dark); }
-  .tab-panel { display:none; }
-  .tab-panel.active { display:block; }
+  .tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+  .tab-btn{padding:0.5rem 1.2rem;border-radius:2rem;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);font-size:0.8rem;cursor:pointer;background:transparent;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .tab-btn.active{background:var(--rose-dark);color:white;border-color:var(--rose-dark);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
 
-  /* TABLES */
-  .table-toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.8rem; }
-  .tbl-input { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:0.5rem 1rem; color:white; font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; width:220px; }
-  .tbl-input::placeholder { color:rgba(255,255,255,0.3); }
-  .tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-  th { text-align:left; padding:0.7rem 1rem; border-bottom:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.4); font-weight:400; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap; }
-  td { padding:0.8rem 1rem; border-bottom:1px solid rgba(255,255,255,0.04); color:rgba(255,255,255,0.8); vertical-align:top; }
-  tr:hover td { background:rgba(255,255,255,0.02); }
-  .badge { display:inline-block; padding:0.2rem 0.7rem; border-radius:2rem; font-size:0.7rem; font-weight:500; text-transform:capitalize; }
-  .badge-pending   { background:rgba(201,169,110,0.2); color:var(--gold-light); }
-  .badge-confirmed { background:rgba(100,180,120,0.2); color:#7edd9a; }
-  .badge-completed { background:rgba(100,120,200,0.2); color:#b3c5ff; }
-  .badge-cancelled { background:rgba(200,80,80,0.2);  color:#f5a0a0; }
-  .act-btn { background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:0.2rem 0.65rem; border-radius:2rem; font-size:0.7rem; cursor:pointer; font-family:'DM Sans',sans-serif; margin:0.1rem; transition:all 0.15s; white-space:nowrap; }
-  .act-btn:hover { border-color:var(--rose); color:var(--rose); }
-  .act-btn.confirm  { border-color:rgba(100,180,120,0.4); color:#7edd9a; }
-  .act-btn.complete { border-color:rgba(100,120,200,0.4); color:#b3c5ff; }
-  .act-btn.cancel   { border-color:rgba(200,80,80,0.3);  color:#f5a0a0; }
-  .act-btn.notify   { border-color:rgba(100,220,100,0.3); color:#a0f0a0; }
-  .pagination { display:flex; gap:0.4rem; margin-top:1rem; flex-wrap:wrap; }
-  .pagination button { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:white; padding:0.25rem 0.65rem; border-radius:6px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.78rem; }
-  .pagination button.active { background:var(--rose-dark); border-color:var(--rose-dark); }
-  .export-btn { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); padding:0.4rem 0.9rem; border-radius:2rem; font-size:0.75rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
-  .add-btn { background:var(--rose-dark); border:none; color:white; padding:0.4rem 1rem; border-radius:2rem; font-size:0.78rem; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  /* TABLE */
+  .table-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.8rem;}
+  .tbl-input{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 1rem;color:white;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;width:240px;}
+  .tbl-input::placeholder{color:rgba(255,255,255,0.3);}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:0.84rem;}
+  th{text-align:left;padding:0.7rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);font-weight:400;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
+  td{padding:0.75rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.8);vertical-align:top;}
+  tr:hover td{background:rgba(255,255,255,0.02);}
+  .badge{display:inline-block;padding:0.2rem 0.7rem;border-radius:2rem;font-size:0.7rem;font-weight:500;text-transform:capitalize;}
+  .badge-pending  {background:rgba(201,169,110,0.2);color:var(--gold-light);}
+  .badge-confirmed{background:rgba(100,180,120,0.2);color:#7edd9a;}
+  .badge-completed{background:rgba(100,120,200,0.2);color:#b3c5ff;}
+  .badge-cancelled{background:rgba(200,80,80,0.2); color:#f5a0a0;}
+  .act-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:0.18rem 0.6rem;border-radius:2rem;font-size:0.68rem;cursor:pointer;font-family:'DM Sans',sans-serif;margin:0.1rem;transition:all 0.15s;white-space:nowrap;}
+  .act-btn:hover{border-color:var(--rose);color:var(--rose);}
+  .act-btn.confirm {border-color:rgba(100,180,120,0.4);color:#7edd9a;}
+  .act-btn.complete{border-color:rgba(100,120,200,0.4);color:#b3c5ff;}
+  .act-btn.cancel  {border-color:rgba(200,80,80,0.3); color:#f5a0a0;}
+  .act-btn.notify  {border-color:rgba(100,220,100,0.3);color:#a0f0a0;}
+  .pagination{display:flex;gap:0.4rem;margin-top:1rem;flex-wrap:wrap;}
+  .pagination button{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:white;padding:0.25rem 0.65rem;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.78rem;}
+  .pagination button.active{background:var(--rose-dark);border-color:var(--rose-dark);}
+  .toolbar-btns{display:flex;gap:0.5rem;flex-wrap:wrap;}
+  .export-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);padding:0.4rem 0.9rem;border-radius:2rem;font-size:0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+  .add-btn{background:var(--rose-dark);border:none;color:white;padding:0.4rem 1rem;border-radius:2rem;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+  .refresh-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:0.4rem 0.9rem;border-radius:2rem;font-size:0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
 
   /* GALLERY MANAGER */
-  .upload-zone { border:2px dashed rgba(255,255,255,0.2); border-radius:16px; padding:2.5rem 2rem; text-align:center; cursor:pointer; transition:all 0.2s; margin-bottom:1.5rem; background:rgba(255,255,255,0.02); }
-  .upload-zone:hover,.upload-zone.dragover { border-color:var(--rose); background:rgba(255,255,255,0.04); }
-  .upload-zone input[type=file] { display:none; }
-  .upload-meta { display:none; flex-wrap:wrap; gap:0.8rem; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:1rem; margin-bottom:1.5rem; }
-  .upload-meta input,.upload-meta select { padding:0.6rem 0.9rem; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:white; font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; flex:1; min-width:130px; }
-  .upload-meta input::placeholder { color:rgba(255,255,255,0.3); }
-  .upload-meta select option { background:#2a1f1f; }
-  .upload-preview { width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--rose); display:none; }
-  .upload-btn { background:var(--rose-dark); border:none; color:white; padding:0.6rem 1.2rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer; }
-  .mgr-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:0.8rem; }
-  .mgr-item { position:relative; border-radius:10px; overflow:hidden; aspect-ratio:1; background:rgba(255,255,255,0.05); }
-  .mgr-item img { width:100%; height:100%; object-fit:cover; display:block; }
-  .mgr-info { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.65); padding:0.35rem 0.5rem; }
-  .mgr-name { font-size:0.68rem; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .mgr-tag  { font-size:0.6rem; color:var(--rose); }
-  .mgr-del  { position:absolute; top:5px; right:5px; width:22px; height:22px; border-radius:50%; background:rgba(180,50,50,0.85); color:white; border:none; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; }
-  .mgr-item:hover .mgr-del { opacity:1; }
-  .mgr-empty { color:rgba(255,255,255,0.3); font-size:0.88rem; text-align:center; padding:2rem; }
+  .upload-zone{border:2px dashed rgba(255,255,255,0.2);border-radius:16px;padding:2.5rem 2rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:1.5rem;background:rgba(255,255,255,0.02);}
+  .upload-zone:hover,.upload-zone.dragover{border-color:var(--rose);background:rgba(255,255,255,0.04);}
+  .upload-zone input[type=file]{display:none;}
+  .upload-meta{display:none;flex-wrap:wrap;gap:0.8rem;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem;margin-bottom:1.5rem;}
+  .upload-meta input,.upload-meta select{padding:0.6rem 0.9rem;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:white;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;flex:1;min-width:130px;}
+  .upload-meta input::placeholder{color:rgba(255,255,255,0.3);}
+  .upload-meta select option{background:#2a1f1f;}
+  .upload-preview{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--rose);display:none;}
+  .upload-btn{background:var(--rose-dark);border:none;color:white;padding:0.6rem 1.2rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;}
+  .mgr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.8rem;}
+  .mgr-item{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1;background:rgba(255,255,255,0.05);}
+  .mgr-item img{width:100%;height:100%;object-fit:cover;display:block;}
+  .mgr-info{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.65);padding:0.35rem 0.5rem;}
+  .mgr-name{font-size:0.68rem;color:white;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mgr-tag{font-size:0.6rem;color:var(--rose);}
+  .mgr-del{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(180,50,50,0.85);color:white;border:none;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+  .mgr-item:hover .mgr-del{opacity:1;}
+  .mgr-empty{color:rgba(255,255,255,0.3);font-size:0.88rem;text-align:center;padding:2rem;}
 
   /* TOAST */
-  .toast { position:fixed; bottom:2rem; right:2rem; background:var(--rose-dark); color:white; padding:0.85rem 1.4rem; border-radius:10px; font-size:0.85rem; box-shadow:0 8px 30px rgba(0,0,0,0.3); transform:translateY(80px); opacity:0; transition:all 0.3s; z-index:999; }
-  .toast.show { transform:translateY(0); opacity:1; }
+  .toast{position:fixed;bottom:2rem;right:2rem;background:var(--rose-dark);color:white;padding:0.85rem 1.4rem;border-radius:10px;font-size:0.85rem;box-shadow:0 8px 30px rgba(0,0,0,0.3);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:999;}
+  .toast.show{transform:translateY(0);opacity:1;}
 
-  @media(max-width:768px) {
-    .dash-header { padding:1rem; }
-    .dash-body   { padding:1rem; }
-    .table-toolbar { flex-direction:column; align-items:flex-start; }
-    .tbl-input { width:100%; }
-    .upload-meta { flex-direction:column; }
+  @media(max-width:768px){
+    .dash-header{padding:1rem;}
+    .dash-body{padding:1rem;}
+    .table-toolbar{flex-direction:column;align-items:flex-start;}
+    .tbl-input{width:100%;}
+    .upload-meta{flex-direction:column;}
+    .stats-grid{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));}
   }
 </style>
 </head>
@@ -153,9 +136,10 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
   <div class="dash-header">
-    <div class="dash-logo">Nails <span>by Rey</span> <small>ADMIN DASHBOARD</small></div>
+    <div class="dash-logo">Nails <span>by Rey</span><small>ADMIN DASHBOARD</small></div>
     <div class="dash-actions">
       <a href="index.html" class="dash-link" target="_blank">↗ View Public Site</a>
+      <button class="refresh-btn" onclick="loadDashboard()">↺ Refresh</button>
       <button class="logout-btn" onclick="doLogout()">Log Out</button>
     </div>
   </div>
@@ -182,33 +166,52 @@
     <!-- BOOKINGS TAB -->
     <div class="tab-panel active" id="tab-bookings">
       <div class="table-toolbar">
-        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+        <div class="toolbar-btns">
           <button class="add-btn" onclick="addManualBooking()">➕ Add Booking</button>
           <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
         </div>
-        <input class="tbl-input" id="bookingSearch" placeholder="Search name or phone..." oninput="renderBookings(1,this.value)">
+        <input class="tbl-input" id="bookingSearch" placeholder="Search name, phone, service..." oninput="renderBookings(1)">
       </div>
-      <div class="tbl-wrap"><table><thead><tr><th>Customer</th><th>Service</th><th>Date · Time</th><th>Phone</th><th>Status</th><th>Final Price</th><th>Actions</th></tr></thead><tbody id="bookingsTbody"></tbody></table></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>ID</th><th>Customer</th><th>Service</th><th>Date · Time</th>
+            <th>Phone</th><th>Status</th><th>Final Price</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="bookingsTbody"></tbody>
+        </table>
+      </div>
       <div class="pagination" id="bkPagination"></div>
     </div>
 
     <!-- CUSTOMERS TAB -->
     <div class="tab-panel" id="tab-customers">
       <div class="table-toolbar">
-        <input class="tbl-input" id="custSearch" placeholder="Search name or phone..." oninput="renderCustomers(1,this.value)">
+        <input class="tbl-input" id="custSearch" placeholder="Search name or phone..." oninput="renderCustomers(1)">
         <button class="export-btn" onclick="exportCustomersCSV()">📥 Export CSV</button>
       </div>
-      <div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Visits</th><th>Last Service</th><th>Total Spent</th></tr></thead><tbody id="customersTbody"></tbody></table></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Phone</th><th>Visits</th><th>Last Service</th><th>Total Spent</th>
+          </tr></thead>
+          <tbody id="customersTbody"></tbody>
+        </table>
+      </div>
       <div class="pagination" id="custPagination"></div>
     </div>
 
     <!-- GALLERY TAB -->
     <div class="tab-panel" id="tab-gallery">
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('photoInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+      <div class="upload-zone" id="uploadZone"
+        onclick="document.getElementById('photoInput').click()"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="handleDrop(event)">
         <input type="file" id="photoInput" accept="image/*" multiple onchange="handleFileSelect(this.files)">
         <div style="font-size:2.5rem;margin-bottom:0.6rem;opacity:0.7;">📷</div>
-        <div style="color:rgba(255,255,255,0.6);">Drag & drop photos here or <span style="color:var(--rose);text-decoration:underline;cursor:pointer;">browse files</span></div>
-        <div style="font-size:0.78rem;color:rgba(255,255,255,0.3);margin-top:0.4rem;">JPG, PNG, WEBP · Multiple files supported</div>
+        <div style="color:rgba(255,255,255,0.6);">Drag & drop photos or <span style="color:var(--rose);text-decoration:underline;cursor:pointer;">browse files</span></div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.3);margin-top:0.4rem;">JPG · PNG · WEBP · Multiple files supported</div>
       </div>
       <div class="upload-meta" id="uploadMeta">
         <img id="uploadPreview" class="upload-preview" alt="Preview">
@@ -222,11 +225,11 @@
           <option value="others">Others</option>
         </select>
         <button class="upload-btn" id="uploadBtn" onclick="savePhoto()">Upload to Gallery</button>
-        <button class="act-btn" onclick="cancelUpload()" style="padding:0.6rem 1rem;">Cancel</button>
+        <button class="act-btn" onclick="cancelUpload()" style="padding:0.55rem 1rem;">Cancel</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
         <div style="font-size:0.8rem;color:rgba(255,255,255,0.4);" id="galleryCount"></div>
-        <button class="act-btn cancel" onclick="clearAllPhotos()">Clear All</button>
+        <button class="act-btn cancel" onclick="clearAllPhotos()">Clear All Photos</button>
       </div>
       <div class="mgr-grid" id="galleryMgrGrid"></div>
     </div>
@@ -236,22 +239,25 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────
+// ── CONFIG ────────────────────────────────────────────────
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypOt0N-RCiBowshVcdTUte-Dmn-_Iizbf5nt0ciKiozLT7e-gGFmG4iCXgNTGW4ils/exec';
 const API_KEY         = 'AIzaSyCSof22kUg19D6wdd0PYXmUPkA71x-sFhU';
 const SPREADSHEET_ID  = '1nbQzt6TzZ4fi0mt1_v4sAsOO9ZIFyMHiGWUz61NVz7s';
 const IMGBB_API_KEY   = 'ee8cadb535db992cb5cd149c81eedf20';
 const ADMIN_PASSWORD  = 'nailsbyrey2025';
-const PAGE_SIZE       = 10;
+const PAGE_SIZE       = 15;
 
-let bookings = [], bkPage = 1, custPage = 1;
+// Strict column order — no email, no code
+const BOOKING_COLS = ['id','fname','lname','phone','service','date','time','notes','status','finalservice','finalprice'];
 
-// ── AUTH ───────────────────────────────────────────────────
+let bookings = [];
+
+// ── AUTH ──────────────────────────────────────────────────
 function doLogin() {
   if (document.getElementById('pwInput').value === ADMIN_PASSWORD) {
     sessionStorage.setItem('nbrAdmin','1');
-    document.getElementById('gateWrap').style.display   = 'none';
-    document.getElementById('dashboard').style.display  = 'block';
+    document.getElementById('gateWrap').style.display  = 'none';
+    document.getElementById('dashboard').style.display = 'block';
     document.getElementById('pwInput').value = '';
     loadDashboard();
   } else {
@@ -269,7 +275,7 @@ if (sessionStorage.getItem('nbrAdmin')) {
   document.getElementById('dashboard').style.display = 'block';
 }
 
-// ── SHEET READ ─────────────────────────────────────────────
+// ── SHEET READ ────────────────────────────────────────────
 async function loadFromSheet(tab) {
   const url  = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${tab}!A:Z?key=${API_KEY}`;
   const res  = await fetch(url);
@@ -277,11 +283,11 @@ async function loadFromSheet(tab) {
   if (!json.values || json.values.length < 2) return [];
   const headers = json.values[0].map(h => String(h).toLowerCase().trim());
   return json.values.slice(1).map(row =>
-    headers.reduce((obj,h,i) => { obj[h] = row[i] !== undefined ? String(row[i]) : ''; return obj; }, {})
+    headers.reduce((obj,h,i) => { obj[h]=row[i]!==undefined?String(row[i]):''; return obj; }, {})
   );
 }
 
-// ── SHEET WRITE ────────────────────────────────────────────
+// ── SHEET WRITE ───────────────────────────────────────────
 async function postToSheet(payload) {
   try {
     await fetch(APPS_SCRIPT_URL, {
@@ -292,7 +298,22 @@ async function postToSheet(payload) {
   } catch(e) { console.warn('Write failed:', e); }
 }
 
-// ── LOAD DASHBOARD ─────────────────────────────────────────
+// ── GET NEXT CLEAN ID ─────────────────────────────────────
+async function getNextId() {
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL + '?action=nextId');
+    const json = await res.json();
+    if (json.ok && json.id) return json.id;
+  } catch(e) {}
+  let max = 0;
+  bookings.forEach(b => {
+    const n = parseInt(String(b.id).replace(/\D/g,''), 10);
+    if (!isNaN(n) && n > max) max = n;
+  });
+  return 'BK' + String(max + 1).padStart(3,'0');
+}
+
+// ── LOAD DASHBOARD ────────────────────────────────────────
 async function loadDashboard() {
   showToast('Loading data...');
   try {
@@ -307,17 +328,21 @@ async function loadDashboard() {
       time:         b.time         || '',
       notes:        b.notes        || '',
       status:       (b.status      || 'pending').toLowerCase(),
-      finalservice: b.finalservice || b.finalService || '',
-      finalprice:   b.finalprice   || b.finalPrice   || ''
+      finalservice: b.finalservice || '',
+      finalprice:   b.finalprice   || ''
     }));
-  } catch(e) { showToast('Could not load sheet data'); bookings = []; }
+    showToast('Data loaded ✦');
+  } catch(e) {
+    showToast('Could not load sheet — check API key');
+    bookings = [];
+  }
   updateStats();
   renderBookings();
   renderCustomers();
   renderGalleryManager();
 }
 
-// ── STATS ──────────────────────────────────────────────────
+// ── STATS ─────────────────────────────────────────────────
 function updateStats() {
   const by = s => bookings.filter(b=>b.status===s).length;
   document.getElementById('st-total').textContent     = bookings.length;
@@ -325,147 +350,188 @@ function updateStats() {
   document.getElementById('st-confirmed').textContent = by('confirmed');
   document.getElementById('st-completed').textContent = by('completed');
   document.getElementById('st-cancelled').textContent = by('cancelled');
-  const rev = bookings.filter(b=>b.status==='completed').reduce((s,b)=>s+(parseFloat(b.finalprice)||0),0);
-  document.getElementById('st-revenue').textContent   = 'RM '+rev.toFixed(0);
+  const rev = bookings.filter(b=>b.status==='completed')
+    .reduce((s,b)=>s+(parseFloat(b.finalprice)||0), 0);
+  document.getElementById('st-revenue').textContent = 'RM ' + rev.toFixed(0);
 }
 
-// ── BOOKINGS TABLE ─────────────────────────────────────────
-function renderBookings(page=1, filter='') {
-  bkPage = page;
-  const q = (filter||document.getElementById('bookingSearch').value||'').toLowerCase();
-  const list = q ? bookings.filter(b=>`${b.fname} ${b.lname} ${b.phone} ${b.service}`.toLowerCase().includes(q)) : bookings;
+// ── BOOKINGS TABLE ────────────────────────────────────────
+function renderBookings(page=1) {
+  const q = (document.getElementById('bookingSearch').value||'').toLowerCase();
+  const list = q
+    ? bookings.filter(b=>`${b.fname} ${b.lname} ${b.phone} ${b.service} ${b.id}`.toLowerCase().includes(q))
+    : bookings;
   const total = Math.ceil(list.length/PAGE_SIZE)||1;
+  page = Math.min(page, total);
   const paged = list.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
 
   document.getElementById('bookingsTbody').innerHTML = paged.map(b => `
     <tr>
+      <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${b.id}</td>
       <td>${b.fname} ${b.lname}</td>
-      <td style="max-width:160px;word-break:break-word;">${b.service}</td>
-      <td style="white-space:nowrap;">${b.date}<br><span style="color:rgba(255,255,255,0.4);font-size:0.78rem;">${b.time}</span></td>
-      <td style="font-size:0.8rem;color:rgba(255,255,255,0.5);">${b.phone}</td>
+      <td style="max-width:160px;word-break:break-word;font-size:0.8rem;">${b.service}</td>
+      <td style="white-space:nowrap;font-size:0.8rem;">${b.date}<br><span style="color:rgba(255,255,255,0.4);">${b.time}</span></td>
+      <td style="font-size:0.78rem;color:rgba(255,255,255,0.5);">${b.phone}</td>
       <td><span class="badge badge-${b.status}">${b.status}</span></td>
       <td>${b.finalprice ? 'RM '+b.finalprice : '—'}</td>
       <td style="white-space:nowrap;">
         <button class="act-btn" onclick="editBooking('${b.id}')">Edit</button>
         <button class="act-btn cancel" onclick="deleteBooking('${b.id}')">Delete</button>
-        ${b.status==='pending'   ? `<button class="act-btn confirm"  onclick="updateStatus('${b.id}','confirmed')">Confirm</button>`   : ''}
+        ${b.status==='pending'   ? `<button class="act-btn confirm"  onclick="updateStatus('${b.id}','confirmed')">Confirm</button>` : ''}
         ${b.status==='confirmed' ? `<button class="act-btn complete" onclick="updateStatus('${b.id}','completed')">Complete</button>` : ''}
         ${(b.status==='pending'||b.status==='confirmed') ? `<button class="act-btn cancel" onclick="updateStatus('${b.id}','cancelled')">Cancel</button>` : ''}
         ${b.status==='confirmed' ? `<button class="act-btn notify"   onclick="notifyWA('${b.id}')">Notify</button>` : ''}
       </td>
-    </tr>`).join('');
+    </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:2rem;">No bookings found</td></tr>';
 
   const pg = document.getElementById('bkPagination');
   pg.innerHTML = '';
-  for(let i=1;i<=total;i++) { const btn=document.createElement('button'); btn.textContent=i; btn.className=i===page?'active':''; btn.onclick=()=>renderBookings(i,q); pg.appendChild(btn); }
+  for(let i=1;i<=total;i++){
+    const btn=document.createElement('button');
+    btn.textContent=i; btn.className=i===page?'active':'';
+    btn.onclick=()=>renderBookings(i);
+    pg.appendChild(btn);
+  }
 }
 
-// ── STATUS UPDATE ──────────────────────────────────────────
+// ── UPDATE STATUS ─────────────────────────────────────────
 async function updateStatus(id, newStatus) {
   const b = bookings.find(b=>b.id===id);
-  if (!b) return;
+  if (!b) return showToast('Booking not found');
   let fp = b.finalprice;
   if (newStatus==='completed') {
-    const p = prompt('Enter final price (RM):', fp||'');
+    const p = prompt(`Enter final price (RM) for ${b.fname} ${b.lname}:`, fp||'');
     if (p===null) return;
     fp = p.trim();
-    if (isNaN(parseFloat(fp))) return showToast('Invalid price');
+    if (isNaN(parseFloat(fp)) && fp!=='') return showToast('Invalid price — please enter a number');
   }
   b.status = newStatus;
-  if (fp !== undefined) b.finalprice = fp;
-  // Send targeted update to Apps Script (only touches 2 cells)
-  await postToSheet({ type:'updateStatus', id, status:newStatus, finalPrice: fp||'' });
+  if (fp!==undefined) b.finalprice = fp;
+  // Push only changed cells to sheet
+  await postToSheet({ type:'updateStatus', id, status:newStatus, finalPrice:fp||'' });
   updateStats(); renderBookings(); renderCustomers();
-  showToast(`Marked as ${newStatus} ✦`);
+  showToast(`Booking ${id} marked as ${newStatus} ✦`);
 }
 
-// ── EDIT BOOKING ───────────────────────────────────────────
+// ── EDIT BOOKING ──────────────────────────────────────────
 async function editBooking(id) {
   const b = bookings.find(b=>b.id===id);
   if (!b) return;
   const name = prompt('Full name:', `${b.fname} ${b.lname}`); if(name===null) return;
-  const [fname,...rest] = name.split(' '); b.fname=fname; b.lname=rest.join(' ')||'';
-  const svc = prompt('Service:', b.service); if(svc===null) return; b.service=svc;
-  const dt  = prompt('Date (YYYY-MM-DD):', b.date); if(dt===null) return; b.date=dt;
-  const tm  = prompt('Time:', b.time); if(tm===null) return; b.time=tm;
-  const ph  = prompt('Phone:', b.phone); if(ph===null) return; b.phone=ph;
-  const st  = prompt('Status (pending/confirmed/completed/cancelled):', b.status); if(st===null) return; b.status=st;
-  if (b.status==='completed') { const p=prompt('Final price (RM):',b.finalprice||''); if(p!==null) b.finalprice=p; }
+  const [fname,...rest]=name.split(' '); b.fname=fname; b.lname=rest.join(' ')||'';
+  const svc=prompt('Service:', b.service); if(svc===null) return; b.service=svc;
+  const dt =prompt('Date (YYYY-MM-DD):', b.date); if(dt===null) return; b.date=dt;
+  const tm =prompt('Time:', b.time); if(tm===null) return; b.time=tm;
+  const ph =prompt('Phone:', b.phone); if(ph===null) return; b.phone=ph;
+  const st =prompt('Status (pending/confirmed/completed/cancelled):', b.status); if(st===null) return; b.status=st;
+  if (b.status==='completed') {
+    const p=prompt('Final price (RM):', b.finalprice||'');
+    if(p!==null) b.finalprice=p;
+  }
   await postToSheet({ type:'updateBooking', data:b });
   updateStats(); renderBookings(); renderCustomers();
   showToast('Booking updated ✦');
 }
 
-// ── DELETE BOOKING ─────────────────────────────────────────
+// ── DELETE BOOKING ────────────────────────────────────────
 async function deleteBooking(id) {
-  if (!confirm('Delete this booking? This cannot be undone.')) return;
+  if (!confirm(`Delete booking ${id}? This cannot be undone.`)) return;
   bookings = bookings.filter(b=>b.id!==id);
   await postToSheet({ type:'deleteBooking', id });
   updateStats(); renderBookings(); renderCustomers();
   showToast('Booking deleted ✦');
 }
 
-// ── NOTIFY VIA WHATSAPP ────────────────────────────────────
+// ── NOTIFY VIA WHATSAPP ───────────────────────────────────
 function notifyWA(id) {
   const b = bookings.find(b=>b.id===id);
   if (!b) return;
-  const msg = encodeURIComponent(`Hi ${b.fname}! ✨ Your appointment with Nails by Rey is confirmed for ${b.date} at ${b.time}. Service: ${b.service}. See you soon! — Rey 💅`);
+  const msg=encodeURIComponent(
+    `Hi ${b.fname}! ✨ Your appointment with Nails by Rey is confirmed for ${b.date} at ${b.time}.\nService: ${b.service}.\nSee you soon! — Rey 💅`
+  );
   window.open(`https://wa.me/${b.phone.replace(/\D/g,'')}?text=${msg}`, '_blank');
 }
 
-// ── MANUAL ADD ─────────────────────────────────────────────
+// ── MANUAL ADD BOOKING ────────────────────────────────────
 async function addManualBooking() {
-  const name = prompt('Full name:');     if(!name) return;
-  const svc  = prompt('Service:');       if(!svc)  return;
-  const dt   = prompt('Date (YYYY-MM-DD):'); if(!dt) return;
-  const tm   = prompt('Time:');          if(!tm)   return;
-  const ph   = prompt('Phone (with +60):','+60')||'+6000000000';
-  const st   = prompt('Status:','pending')||'pending';
-  let fp = '';
-  if (st==='completed') { fp=prompt('Final price (RM):','') || ''; }
-  const booking = { id:'BK'+Date.now(), fname:name, lname:'', phone:ph, service:svc, date:dt, time:tm, notes:'', status:st, finalservice:svc, finalprice:fp };
+  const name=prompt('Customer full name:'); if(!name||!name.trim()) return;
+  const svc =prompt('Service(s):');         if(!svc||!svc.trim())  return;
+  const dt  =prompt('Date (YYYY-MM-DD):');  if(!dt||!dt.trim())    return;
+  const tm  =prompt('Time (e.g. 14:00):');  if(!tm||!tm.trim())    return;
+  const ph  =prompt('Phone (with country code, e.g. +60123456789):','+')||'+';
+  const st  =prompt('Status:','pending')||'pending';
+
+  let fp='', fs='';
+  if (st==='completed') {
+    fs=prompt('Final service description:', svc)||svc;
+    fp=prompt('Final price (RM):','')||'';
+  }
+
+  const [fname,...rest]=name.trim().split(' ');
+  const newId = await getNextId();
+
+  // Build object strictly matching BOOKING_COLS — no email, no code
+  const booking={
+    id:           newId,
+    fname:        fname,
+    lname:        rest.join(' ')||'',
+    phone:        ph,
+    service:      svc,
+    date:         dt,
+    time:         tm,
+    notes:        '',
+    status:       st,
+    finalservice: fs,
+    finalprice:   fp
+  };
+
   bookings.push(booking);
   await postToSheet({ type:'addBooking', data:booking });
   updateStats(); renderBookings(); renderCustomers();
-  showToast('Booking added ✦');
+  showToast(`Booking ${newId} added ✦`);
 }
 
-// ── CUSTOMERS TABLE ────────────────────────────────────────
-function renderCustomers(page=1, filter='') {
-  custPage = page;
-  const q = (filter||document.getElementById('custSearch').value||'').toLowerCase();
+// ── CUSTOMERS TABLE ───────────────────────────────────────
+function renderCustomers(page=1) {
+  const q = (document.getElementById('custSearch').value||'').toLowerCase();
   const map = {};
   bookings.forEach(b => {
     if (b.status!=='completed') return;
-    // Composite key: phone + name — prevents merging different people with same number
+    // Composite key: phone + fname + lname — prevents merging different people with same number
     const key = `${b.phone}__${(b.fname||'').toLowerCase()}__${(b.lname||'').toLowerCase()}`;
-    if (!map[key]) map[key] = { name:`${b.fname} ${b.lname}`.trim(), phone:b.phone, visits:0, last:'', spent:0 };
+    if (!map[key]) map[key]={ name:`${b.fname} ${b.lname}`.trim(), phone:b.phone, visits:0, last:'', spent:0 };
     map[key].visits++;
-    if (!map[key].last || b.date > map[key].last) map[key].last = b.service;
+    if (!map[key].last || b.date>map[key].last) map[key].last=b.service;
     map[key].spent += parseFloat(b.finalprice)||0;
   });
   let customers = Object.values(map);
-  if (q) customers = customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
-  const total = Math.ceil(customers.length/PAGE_SIZE)||1;
-  const paged = customers.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  if (q) customers=customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+  const total=Math.ceil(customers.length/PAGE_SIZE)||1;
+  page=Math.min(page,total);
+  const paged=customers.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+
   document.getElementById('customersTbody').innerHTML = paged.map(c=>`
     <tr>
       <td>${c.name}</td>
       <td style="font-size:0.8rem;color:rgba(255,255,255,0.5);">${c.phone}</td>
       <td>${c.visits}</td>
-      <td style="max-width:160px;word-break:break-word;">${c.last}</td>
+      <td style="max-width:180px;word-break:break-word;font-size:0.8rem;">${c.last}</td>
       <td>RM ${c.spent.toFixed(0)}</td>
-    </tr>`).join('');
-  const pg = document.getElementById('custPagination');
+    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:2rem;">No completed bookings yet</td></tr>';
+
+  const pg=document.getElementById('custPagination');
   pg.innerHTML='';
-  for(let i=1;i<=total;i++){ const btn=document.createElement('button'); btn.textContent=i; btn.className=i===page?'active':''; btn.onclick=()=>renderCustomers(i,q); pg.appendChild(btn); }
+  for(let i=1;i<=total;i++){
+    const btn=document.createElement('button'); btn.textContent=i; btn.className=i===page?'active':'';
+    btn.onclick=()=>renderCustomers(i); pg.appendChild(btn);
+  }
 }
 
-// ── CSV EXPORT ─────────────────────────────────────────────
+// ── CSV EXPORT ────────────────────────────────────────────
 function exportCSV() {
-  const h = ['ID','First','Last','Phone','Service','Date','Time','Notes','Status','Final Service','Final Price'];
-  const rows = bookings.map(b=>[b.id,b.fname,b.lname,b.phone,b.service,b.date,b.time,b.notes,b.status,b.finalservice,b.finalprice]);
-  dlCSV([h,...rows].map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n'), 'bookings.csv');
+  const h=['ID','First Name','Last Name','Phone','Service','Date','Time','Notes','Status','Final Service','Final Price'];
+  const rows=bookings.map(b=>BOOKING_COLS.map(col=>b[col]||''));
+  dlCSV([h,...rows].map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n'),'bookings.csv');
   showToast('CSV exported ✦');
 }
 function exportCustomersCSV() {
@@ -481,11 +547,13 @@ function exportCustomersCSV() {
   dlCSV([h,...rows].map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n'),'customers.csv');
   showToast('CSV exported ✦');
 }
-function dlCSV(content,filename) {
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8;'})); a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+function dlCSV(content, filename) {
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8;'}));
+  a.download=filename; a.click(); URL.revokeObjectURL(a.href);
 }
 
-// ── GALLERY MANAGER ────────────────────────────────────────
+// ── GALLERY MANAGER ───────────────────────────────────────
 async function loadGalleryFromSheet() {
   try {
     const url=`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Gallery!A:D?key=${API_KEY}`;
@@ -501,21 +569,21 @@ async function renderGalleryManager() {
   const cnt =document.getElementById('galleryCount');
   if(!grid) return;
   grid.innerHTML='<div class="mgr-empty">Loading...</div>';
-  const photos = await loadGalleryFromSheet();
+  const photos=await loadGalleryFromSheet();
   cnt.textContent=`${photos.length} uploaded photo${photos.length!==1?'s':''}`;
   document.getElementById('st-photos').textContent=photos.length;
   if(!photos.length){ grid.innerHTML='<div class="mgr-empty">No photos uploaded yet. Use the upload zone above.</div>'; return; }
   grid.innerHTML=photos.map(p=>`
     <div class="mgr-item">
-      <img src="${p.url||p.dataurl}" alt="${p.label}">
+      <img src="${p.url||p.dataurl||''}" alt="${p.label}" onerror="this.style.display='none'">
       <div class="mgr-info"><div class="mgr-name">${p.label}</div><div class="mgr-tag">${p.tag}</div></div>
       <button class="mgr-del" onclick="deletePhoto('${p.id}')">✕</button>
     </div>`).join('');
 }
 
 let pendingFiles=[],pendingIndex=0;
-function handleFileSelect(files){ if(files.length){pendingFiles=Array.from(files);pendingIndex=0;loadNextPending();} }
-function handleDrop(e){ e.preventDefault(); document.getElementById('uploadZone').classList.remove('dragover'); handleFileSelect(e.dataTransfer.files); }
+function handleFileSelect(files){if(files.length){pendingFiles=Array.from(files);pendingIndex=0;loadNextPending();}}
+function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('dragover');handleFileSelect(e.dataTransfer.files);}
 function loadNextPending(){
   if(pendingIndex>=pendingFiles.length) return;
   const file=pendingFiles[pendingIndex];
@@ -538,31 +606,26 @@ async function savePhoto(){
   const btn=document.getElementById('uploadBtn');
   btn.textContent='Uploading...'; btn.disabled=true;
   try {
-    let url=null;
+    let url=data; // default fallback
     if(IMGBB_API_KEY && IMGBB_API_KEY!=='YOUR_IMGBB_API_KEY'){
       const fd=new FormData(); fd.append('image',data.split(',')[1]);
       const res=await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,{method:'POST',body:fd});
       const json=await res.json();
-      if(!json.success) throw new Error(json.error?.message||'ImgBB failed');
+      if(!json.success) throw new Error(json.error?.message||'ImgBB upload failed');
       url=json.data.url;
-    } else {
-      // Fallback: store base64 directly (local only, no cross-device)
-      url=data;
-      showToast('No ImgBB key — saved locally only');
     }
-    const record={id:'u'+Date.now(),label:title,tag,url};
-    await postToSheet({type:'addGallery',data:record});
+    const record={id:'u'+Date.now(), label:title, tag, url};
+    await postToSheet({type:'addGallery', data:record});
     pendingIndex++;
-    if(pendingIndex<pendingFiles.length){ loadNextPending(); showToast(`Saved! ${pendingFiles.length-pendingIndex} more to go.`); }
-    else { cancelUpload(); showToast('Photo added to gallery ✦'); }
+    if(pendingIndex<pendingFiles.length){loadNextPending();showToast(`Saved! ${pendingFiles.length-pendingIndex} more to go.`);}
+    else{cancelUpload();showToast('Photo added to gallery ✦');}
     await renderGalleryManager();
-    document.getElementById('st-photos').textContent=parseInt(document.getElementById('st-photos').textContent||0)+1;
-  } catch(err){ showToast('Upload failed: '+err.message); }
-  finally { btn.textContent='Upload to Gallery'; btn.disabled=false; }
+  } catch(err){showToast('Upload failed: '+err.message);}
+  finally{btn.textContent='Upload to Gallery';btn.disabled=false;}
 }
 
 function cancelUpload(){
-  pendingFiles=[]; pendingIndex=0;
+  pendingFiles=[];pendingIndex=0;
   document.getElementById('uploadMeta').style.display='none';
   document.getElementById('uploadZone').style.display='block';
   document.getElementById('uploadPreview').style.display='none';
@@ -578,13 +641,13 @@ async function deletePhoto(id){
 }
 
 async function clearAllPhotos(){
-  if(!confirm('Remove ALL photos from the gallery? This cannot be undone.')) return;
+  if(!confirm('Remove ALL photos? This cannot be undone.')) return;
   await postToSheet({type:'clearGallery'});
   showToast('Gallery cleared');
   await renderGalleryManager();
 }
 
-// ── TABS ───────────────────────────────────────────────────
+// ── TABS ──────────────────────────────────────────────────
 function switchTab(id, btn){
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
@@ -592,14 +655,14 @@ function switchTab(id, btn){
   document.getElementById('tab-'+id).classList.add('active');
 }
 
-// ── TOAST ──────────────────────────────────────────────────
+// ── TOAST ─────────────────────────────────────────────────
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// ── STARTUP ────────────────────────────────────────────────
+// ── STARTUP ───────────────────────────────────────────────
 if(sessionStorage.getItem('nbrAdmin')) loadDashboard();
 </script>
 </body>
