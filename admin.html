@@ -64,7 +64,13 @@
   .tbl-input::placeholder{color:rgba(255,255,255,0.3);}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   table{width:100%;border-collapse:collapse;font-size:0.84rem;}
-  th{text-align:left;padding:0.7rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);font-weight:400;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
+
+  /* Fix 3: sortable th */
+  th{text-align:left;padding:0.7rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);font-weight:400;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none;transition:color 0.15s;}
+  th:hover{color:rgba(255,255,255,0.75);}
+  th.sort-asc::after{content:' ▲';font-size:0.6rem;color:var(--rose);}
+  th.sort-desc::after{content:' ▼';font-size:0.6rem;color:var(--rose);}
+  th.no-sort{cursor:default;}
   td{padding:0.75rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.8);vertical-align:top;}
   tr:hover td{background:rgba(255,255,255,0.02);}
   .badge{display:inline-block;padding:0.2rem 0.7rem;border-radius:2rem;font-size:0.7rem;font-weight:500;text-transform:capitalize;}
@@ -85,9 +91,7 @@
   .add-btn{background:var(--rose-dark);border:none;color:white;padding:0.4rem 1rem;border-radius:2rem;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
   .refresh-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:0.4rem 0.9rem;border-radius:2rem;font-size:0.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
 
-  /* ANALYTICS DASHBOARD TAB */
-  .analytics-section{margin-bottom:2rem;}
-  .analytics-section h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--rose);margin-bottom:1rem;}
+  /* ANALYTICS */
   .chart-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;}
   .chart-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;margin-bottom:1.2rem;}
   .chart-title{font-size:0.88rem;color:rgba(255,255,255,0.8);font-weight:500;}
@@ -95,11 +99,12 @@
   .chart-ctrl-btn{padding:0.25rem 0.8rem;border-radius:2rem;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.5);font-size:0.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
   .chart-ctrl-btn.active{background:var(--rose-dark);color:white;border-color:var(--rose-dark);}
   .chart-wrap{position:relative;height:240px;}
+  .chart-wrap-sm{position:relative;height:220px;}
   .analytics-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
-  .analytics-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
   .perf-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.2rem;text-align:center;}
   .perf-val{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--gold);}
   .perf-label{font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;letter-spacing:0.04em;}
+  .perf-sub{font-size:0.68rem;color:rgba(255,255,255,0.25);margin-top:0.15rem;}
   .service-bar-wrap{display:flex;flex-direction:column;gap:0.6rem;}
   .service-bar-row{display:flex;align-items:center;gap:0.8rem;}
   .service-bar-label{font-size:0.78rem;color:rgba(255,255,255,0.7);min-width:100px;text-align:right;}
@@ -131,6 +136,7 @@
   .toast{position:fixed;bottom:2rem;right:2rem;background:var(--rose-dark);color:white;padding:0.85rem 1.4rem;border-radius:10px;font-size:0.85rem;box-shadow:0 8px 30px rgba(0,0,0,0.3);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:999;}
   .toast.show{transform:translateY(0);opacity:1;}
 
+  /* Fix 2: responsive orientation */
   @media(max-width:768px){
     .dash-header{padding:1rem;}
     .dash-body{padding:1rem;}
@@ -140,7 +146,11 @@
     .upload-meta{flex-direction:column;}
     .stats-grid{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));}
     .analytics-grid-2{grid-template-columns:1fr;}
-    .analytics-grid-3{grid-template-columns:1fr 1fr;}
+  }
+  /* Fix 2: also handle landscape on short screens */
+  @media(max-height:500px) and (orientation:landscape){
+    .dash-body{padding:0.8rem;}
+    .stats-grid{grid-template-columns:repeat(auto-fit,minmax(90px,1fr));}
   }
 </style>
 </head>
@@ -156,7 +166,7 @@
     <input class="gate-input" type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="gate-btn" onclick="doLogin()">Enter Dashboard</button>
     <div class="gate-error" id="loginError">Incorrect password. Please try again.</div>
-    <div class="gate-hint">Default: <code>nailsbyrey2025</code> — change in code before deploying.</div>
+    <div class="gate-hint">Default: <code>nailsbyrey2025</code> — change before deploying.</div>
   </div>
 </div>
 
@@ -172,7 +182,6 @@
   </div>
 
   <div class="dash-body">
-    <!-- STATS STRIP -->
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-val" id="st-total">0</div><div class="stat-label">Total</div></div>
       <div class="stat-card"><div class="stat-val" id="st-pending">0</div><div class="stat-label">Pending</div></div>
@@ -182,7 +191,6 @@
       <div class="stat-card"><div class="stat-val" id="st-revenue">RM 0</div><div class="stat-label">Revenue</div></div>
     </div>
 
-    <!-- TABS — Dashboard first -->
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('analytics',this)">Dashboard</button>
       <button class="tab-btn" onclick="switchTab('bookings',this)">Bookings</button>
@@ -193,62 +201,70 @@
     <!-- ═══ ANALYTICS TAB ═══ -->
     <div class="tab-panel active" id="tab-analytics">
 
-      <!-- 1. Revenue Trend -->
+      <!-- Revenue Trend -->
       <div class="chart-card">
         <div class="chart-header">
           <div class="chart-title">📈 Revenue Trend</div>
           <div class="chart-controls">
-            <button class="chart-ctrl-btn active" onclick="setRevPeriod('daily',this)">Daily</button>
-            <button class="chart-ctrl-btn" onclick="setRevPeriod('weekly',this)">Weekly</button>
-            <button class="chart-ctrl-btn" onclick="setRevPeriod('monthly',this)">Monthly</button>
-            <button class="chart-ctrl-btn" onclick="setRevPeriod('yearly',this)">Yearly</button>
+            <button class="chart-ctrl-btn active" id="revBtn-daily"  onclick="setRevPeriod('daily',this)">Daily</button>
+            <button class="chart-ctrl-btn"         id="revBtn-weekly" onclick="setRevPeriod('weekly',this)">Weekly</button>
+            <button class="chart-ctrl-btn"         id="revBtn-monthly"onclick="setRevPeriod('monthly',this)">Monthly</button>
+            <button class="chart-ctrl-btn"         id="revBtn-yearly" onclick="setRevPeriod('yearly',this)">Yearly</button>
           </div>
         </div>
         <div class="chart-wrap"><canvas id="revChart"></canvas></div>
       </div>
 
-      <!-- 2. Weekday vs Weekend -->
+      <!-- Weekday vs Weekend — Fix 1: pie chart + hours -->
       <div class="analytics-grid-2">
         <div class="chart-card">
           <div class="chart-header"><div class="chart-title">📅 Weekday vs Weekend Performance</div></div>
-          <div class="analytics-grid-2" style="margin-bottom:0;">
+
+          <!-- Stats row: 4 cards — revenue + hours for each -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.2rem;">
             <div class="perf-card">
               <div class="perf-val" id="wdRevenue">RM 0</div>
               <div class="perf-label">Weekday Revenue</div>
-              <div class="perf-val" style="font-size:1.1rem;margin-top:0.5rem;" id="wdCount">0</div>
+              <div class="perf-val" style="font-size:1.1rem;margin-top:0.6rem;" id="wdCount">0</div>
               <div class="perf-label">Bookings</div>
+              <div class="perf-val" style="font-size:1.1rem;color:var(--rose);margin-top:0.6rem;" id="wdHours">0h</div>
+              <div class="perf-label">Est. Hours Spent</div>
+              <div class="perf-sub" id="wdRevPerHour">— RM/hr</div>
             </div>
             <div class="perf-card">
               <div class="perf-val" id="weRevenue">RM 0</div>
               <div class="perf-label">Weekend Revenue</div>
-              <div class="perf-val" style="font-size:1.1rem;margin-top:0.5rem;" id="weCount">0</div>
+              <div class="perf-val" style="font-size:1.1rem;margin-top:0.6rem;" id="weCount">0</div>
               <div class="perf-label">Bookings</div>
+              <div class="perf-val" style="font-size:1.1rem;color:var(--rose);margin-top:0.6rem;" id="weHours">0h</div>
+              <div class="perf-label">Est. Hours Spent</div>
+              <div class="perf-sub" id="weRevPerHour">— RM/hr</div>
             </div>
           </div>
-          <div style="margin-top:1rem;">
-            <div class="chart-wrap" style="height:180px;"><canvas id="wdWeChart"></canvas></div>
-          </div>
+
+          <!-- Fix 1: Pie chart for revenue split, tooltip shows avg RM/hr -->
+          <div class="chart-wrap-sm"><canvas id="wdWeChart"></canvas></div>
         </div>
 
-        <!-- 3. Top Services -->
+        <!-- Top Services -->
         <div class="chart-card">
           <div class="chart-header"><div class="chart-title">🌸 Top Services (Completed)</div></div>
           <div class="service-bar-wrap" id="topServicesBars"></div>
         </div>
       </div>
 
-      <!-- 4. Retention -->
+      <!-- Retention -->
       <div class="chart-card">
         <div class="chart-header">
           <div class="chart-title">💖 Customer Retention (Active vs Cancelled)</div>
           <div class="chart-controls">
-            <button class="chart-ctrl-btn active" onclick="setRetPeriod('daily',this)">Daily</button>
-            <button class="chart-ctrl-btn" onclick="setRetPeriod('weekly',this)">Weekly</button>
-            <button class="chart-ctrl-btn" onclick="setRetPeriod('monthly',this)">Monthly</button>
-            <button class="chart-ctrl-btn" onclick="setRetPeriod('yearly',this)">Yearly</button>
+            <button class="chart-ctrl-btn active" id="retBtn-daily"  onclick="setRetPeriod('daily',this)">Daily</button>
+            <button class="chart-ctrl-btn"         id="retBtn-weekly" onclick="setRetPeriod('weekly',this)">Weekly</button>
+            <button class="chart-ctrl-btn"         id="retBtn-monthly"onclick="setRetPeriod('monthly',this)">Monthly</button>
+            <button class="chart-ctrl-btn"         id="retBtn-yearly" onclick="setRetPeriod('yearly',this)">Yearly</button>
           </div>
         </div>
-        <div style="display:flex;gap:1.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
           <div class="perf-card" style="flex:1;min-width:100px;">
             <div class="perf-val" id="retActive" style="color:#7edd9a;">0</div>
             <div class="perf-label">Active (Pending + Confirmed + Completed)</div>
@@ -265,26 +281,23 @@
         <div class="chart-wrap"><canvas id="retChart"></canvas></div>
       </div>
 
-    </div><!-- end analytics tab -->
+    </div><!-- end analytics -->
 
     <!-- ═══ BOOKINGS TAB ═══ -->
     <div class="tab-panel" id="tab-bookings">
       <div class="table-toolbar">
-        <!-- Fix 3: Export CSV leftmost, then Add Booking -->
         <div class="toolbar-left">
           <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
           <button class="add-btn" onclick="addManualBooking()">➕ Add Booking</button>
         </div>
-        <!-- Fix 2: Search on the right -->
         <div class="toolbar-right">
           <input class="tbl-input" id="bookingSearch" placeholder="Search name, phone or service..." oninput="renderBookings(1)">
         </div>
       </div>
       <div class="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th>ID</th><th>Customer</th><th>Service</th><th>Date · Time</th>
-            <th>Phone</th><th>Status</th><th>Final Price</th><th>Actions</th>
+        <table id="bookingsTable">
+          <thead><tr id="bookingsThead">
+            <!-- Fix 3: headers rendered by JS with sort indicators -->
           </tr></thead>
           <tbody id="bookingsTbody"></tbody>
         </table>
@@ -295,19 +308,17 @@
     <!-- ═══ CUSTOMERS TAB ═══ -->
     <div class="tab-panel" id="tab-customers">
       <div class="table-toolbar">
-        <!-- Fix 3: Export CSV on left -->
         <div class="toolbar-left">
           <button class="export-btn" onclick="exportCustomersCSV()">📥 Export CSV</button>
         </div>
-        <!-- Fix 2: Search on right -->
         <div class="toolbar-right">
           <input class="tbl-input" id="custSearch" placeholder="Search name, phone or service..." oninput="renderCustomers(1)">
         </div>
       </div>
       <div class="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th>Name</th><th>Phone</th><th>Visits</th><th>Last Service</th><th>Total Spent</th>
+        <table id="customersTable">
+          <thead><tr id="customersThead">
+            <!-- Fix 3: headers rendered by JS -->
           </tr></thead>
           <tbody id="customersTbody"></tbody>
         </table>
@@ -341,15 +352,14 @@
         <button class="upload-btn" id="uploadBtn" onclick="savePhoto()">Upload to Gallery</button>
         <button class="act-btn" onclick="cancelUpload()" style="padding:0.55rem 1rem;">Cancel</button>
       </div>
-      <!-- Fix 6: Removed gallery count display -->
       <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
         <button class="act-btn cancel" onclick="clearAllPhotos()">Clear All Photos</button>
       </div>
       <div class="mgr-grid" id="galleryMgrGrid"></div>
     </div>
 
-  </div><!-- end dash-body -->
-</div><!-- end dashboard -->
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -365,11 +375,16 @@ const BOOKING_COLS    = ['id','fname','lname','phone','service','date','time','n
 
 let bookings = [];
 
-// ── FORMAT HELPERS ────────────────────────────────────────
-// Fix 1: thousands separator for all revenue values
+// ── FORMAT ────────────────────────────────────────────────
 function fmtRM(val) {
-  const n = parseFloat(val) || 0;
-  return 'RM ' + n.toLocaleString('en-MY', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const n = parseFloat(val)||0;
+  return 'RM ' + n.toLocaleString('en-MY',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+function fmtHr(h) {
+  if (!h) return '0h';
+  const whole = Math.floor(h);
+  const mins  = Math.round((h - whole) * 60);
+  return mins ? `${whole}h ${mins}m` : `${whole}h`;
 }
 
 // ── AUTH ──────────────────────────────────────────────────
@@ -395,6 +410,15 @@ if (sessionStorage.getItem('nbrAdmin')) {
   document.getElementById('dashboard').style.display = 'block';
 }
 
+// Fix 2: resize handler — recompute layout on orientation change
+window.addEventListener('resize', () => {
+  // Destroy and re-render charts when orientation changes so canvas resizes properly
+  if (document.getElementById('tab-analytics').classList.contains('active')) {
+    clearTimeout(window._resizeTimer);
+    window._resizeTimer = setTimeout(() => { renderAnalytics(); }, 200);
+  }
+});
+
 // ── SHEET READ ────────────────────────────────────────────
 async function loadFromSheet(tab) {
   const url  = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${tab}!A:Z?key=${API_KEY}`;
@@ -418,19 +442,16 @@ async function postToSheet(payload) {
   } catch(e) { console.warn('Write failed:', e); }
 }
 
-// ── NEXT CLEAN ID ─────────────────────────────────────────
+// ── NEXT ID ───────────────────────────────────────────────
 async function getNextId() {
   try {
-    const res  = await fetch(APPS_SCRIPT_URL + '?action=nextId');
-    const json = await res.json();
-    if (json.ok && json.id) return json.id;
+    const res=await fetch(APPS_SCRIPT_URL+'?action=nextId');
+    const json=await res.json();
+    if(json.ok&&json.id) return json.id;
   } catch(e) {}
-  let max = 0;
-  bookings.forEach(b => {
-    const n = parseInt(String(b.id).replace(/\D/g,''), 10);
-    if (!isNaN(n) && n > max) max = n;
-  });
-  return 'BK' + String(max + 1).padStart(3,'0');
+  let max=0;
+  bookings.forEach(b=>{const n=parseInt(String(b.id).replace(/\D/g,''),10);if(!isNaN(n)&&n>max)max=n;});
+  return 'BK'+String(max+1).padStart(3,'0');
 }
 
 // ── LOAD DASHBOARD ────────────────────────────────────────
@@ -438,26 +459,18 @@ async function loadDashboard() {
   showToast('Loading data...');
   try {
     const raw = await loadFromSheet('Bookings');
-    bookings = raw.map(b => ({
-      id:           b.id           || '',
-      fname:        b.fname        || '',
-      lname:        b.lname        || '',
-      phone:        b.phone        || '',
-      service:      b.service      || '',
-      date:         b.date         || '',
-      time:         b.time         || '',
-      notes:        b.notes        || '',
-      status:       (b.status      || 'pending').toLowerCase(),
-      finalservice: b.finalservice || '',
-      finalprice:   b.finalprice   || ''
+    bookings = raw.map(b=>({
+      id:b.id||'', fname:b.fname||'', lname:b.lname||'', phone:b.phone||'',
+      service:b.service||'', date:b.date||'', time:b.time||'',
+      notes:b.notes||'', status:(b.status||'pending').toLowerCase(),
+      finalservice:b.finalservice||'', finalprice:b.finalprice||''
     }));
     showToast('Data loaded ✦');
-  } catch(e) {
-    showToast('Could not load sheet — check API key');
-    bookings = [];
-  }
+  } catch(e) { showToast('Could not load sheet'); bookings=[]; }
   updateStats();
+  initBookingsHeader();
   renderBookings();
+  initCustomersHeader();
   renderCustomers();
   renderGalleryManager();
   renderAnalytics();
@@ -465,30 +478,95 @@ async function loadDashboard() {
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const by = s => bookings.filter(b=>b.status===s).length;
+  const by=s=>bookings.filter(b=>b.status===s).length;
   document.getElementById('st-total').textContent     = bookings.length;
   document.getElementById('st-pending').textContent   = by('pending');
   document.getElementById('st-confirmed').textContent = by('confirmed');
   document.getElementById('st-completed').textContent = by('completed');
   document.getElementById('st-cancelled').textContent = by('cancelled');
-  const rev = bookings.filter(b=>b.status==='completed')
-    .reduce((s,b)=>s+(parseFloat(b.finalprice)||0), 0);
-  // Fix 1: use fmtRM with thousands separator
+  const rev=bookings.filter(b=>b.status==='completed').reduce((s,b)=>s+(parseFloat(b.finalprice)||0),0);
   document.getElementById('st-revenue').textContent = fmtRM(rev);
+}
+
+// ══════════════════════════════════════════════════════════
+//  FIX 3: SORTABLE TABLE HEADERS
+// ══════════════════════════════════════════════════════════
+let bkSortCol='date', bkSortDir='desc';
+let custSortCol='spent', custSortDir='desc';
+
+const BK_COLS = [
+  { key:'id',         label:'ID' },
+  { key:'fname',      label:'Customer' },
+  { key:'service',    label:'Service' },
+  { key:'date',       label:'Date · Time' },
+  { key:'phone',      label:'Phone' },
+  { key:'status',     label:'Status' },
+  { key:'finalprice', label:'Final Price' },
+  { key:null,         label:'Actions',  noSort:true }
+];
+const CUST_COLS = [
+  { key:'name',    label:'Name' },
+  { key:'phone',   label:'Phone' },
+  { key:'visits',  label:'Visits' },
+  { key:'service', label:'All Services' },
+  { key:'spent',   label:'Total Spent' }
+];
+
+function renderSortHeader(trId, cols, curCol, curDir, onClickFn) {
+  const tr = document.getElementById(trId);
+  tr.innerHTML = cols.map(c => {
+    const cls = c.noSort ? 'no-sort' : (c.key===curCol ? (curDir==='asc'?'sort-asc':'sort-desc') : '');
+    const click = c.noSort ? '' : `onclick="${onClickFn}('${c.key}')"`;
+    return `<th class="${cls}" ${click}>${c.label}</th>`;
+  }).join('');
+}
+function initBookingsHeader()  { renderSortHeader('bookingsThead',  BK_COLS,   bkSortCol,   bkSortDir,   'sortBookings'); }
+function initCustomersHeader() { renderSortHeader('customersThead', CUST_COLS, custSortCol, custSortDir, 'sortCustomers'); }
+
+function sortBookings(col) {
+  if (bkSortCol===col) bkSortDir = bkSortDir==='asc'?'desc':'asc';
+  else { bkSortCol=col; bkSortDir='asc'; }
+  initBookingsHeader();
+  renderBookings(1);
+}
+function sortCustomers(col) {
+  if (custSortCol===col) custSortDir = custSortDir==='asc'?'desc':'asc';
+  else { custSortCol=col; custSortDir='asc'; }
+  initCustomersHeader();
+  renderCustomers(1);
+}
+
+function applySort(arr, col, dir) {
+  return [...arr].sort((a,b) => {
+    let va = a[col]||'', vb = b[col]||'';
+    // Numeric sort for price/visits
+    const na=parseFloat(va), nb=parseFloat(vb);
+    if (!isNaN(na)&&!isNaN(nb)) { return dir==='asc'?na-nb:nb-na; }
+    va=String(va).toLowerCase(); vb=String(vb).toLowerCase();
+    return dir==='asc'?va.localeCompare(vb):vb.localeCompare(va);
+  });
 }
 
 // ── BOOKINGS TABLE ────────────────────────────────────────
 function renderBookings(page=1) {
-  // Fix 2: search across name, phone, service, id
-  const q = (document.getElementById('bookingSearch').value||'').toLowerCase();
-  const list = q
+  const q=(document.getElementById('bookingSearch').value||'').toLowerCase();
+  let list = q
     ? bookings.filter(b=>`${b.fname} ${b.lname} ${b.phone} ${b.service} ${b.id} ${b.notes}`.toLowerCase().includes(q))
     : bookings;
-  const total = Math.ceil(list.length/PAGE_SIZE)||1;
-  page = Math.min(page, total);
-  const paged = list.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  // Handle combined name sort
+  if (bkSortCol==='fname') {
+    list = [...list].sort((a,b)=>{
+      const na=`${a.fname} ${a.lname}`.toLowerCase(), nb=`${b.fname} ${b.lname}`.toLowerCase();
+      return bkSortDir==='asc'?na.localeCompare(nb):nb.localeCompare(na);
+    });
+  } else {
+    list = applySort(list, bkSortCol, bkSortDir);
+  }
+  const total=Math.ceil(list.length/PAGE_SIZE)||1;
+  page=Math.min(page,total);
+  const paged=list.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
 
-  document.getElementById('bookingsTbody').innerHTML = paged.map(b => `
+  document.getElementById('bookingsTbody').innerHTML = paged.map(b=>`
     <tr>
       <td style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${b.id}</td>
       <td>${b.fname} ${b.lname}</td>
@@ -496,49 +574,43 @@ function renderBookings(page=1) {
       <td style="white-space:nowrap;font-size:0.8rem;">${b.date}<br><span style="color:rgba(255,255,255,0.4);">${b.time}</span></td>
       <td style="font-size:0.78rem;color:rgba(255,255,255,0.5);">${b.phone}</td>
       <td><span class="badge badge-${b.status}">${b.status}</span></td>
-      <td>${b.finalprice ? fmtRM(b.finalprice) : '—'}</td>
+      <td>${b.finalprice?fmtRM(b.finalprice):'—'}</td>
       <td style="white-space:nowrap;">
         <button class="act-btn" onclick="editBooking('${b.id}')">Edit</button>
         <button class="act-btn cancel" onclick="deleteBooking('${b.id}')">Delete</button>
-        ${b.status==='pending'   ? `<button class="act-btn confirm"  onclick="updateStatus('${b.id}','confirmed')">Confirm</button>` : ''}
-        ${b.status==='confirmed' ? `<button class="act-btn complete" onclick="updateStatus('${b.id}','completed')">Complete</button>` : ''}
-        ${(b.status==='pending'||b.status==='confirmed') ? `<button class="act-btn cancel" onclick="updateStatus('${b.id}','cancelled')">Cancel</button>` : ''}
-        ${b.status==='confirmed' ? `<button class="act-btn notify" onclick="notifyWA('${b.id}')">Notify</button>` : ''}
+        ${b.status==='pending'   ?`<button class="act-btn confirm"  onclick="updateStatus('${b.id}','confirmed')">Confirm</button>`:''}
+        ${b.status==='confirmed' ?`<button class="act-btn complete" onclick="updateStatus('${b.id}','completed')">Complete</button>`:''}
+        ${(b.status==='pending'||b.status==='confirmed')?`<button class="act-btn cancel" onclick="updateStatus('${b.id}','cancelled')">Cancel</button>`:''}
+        ${b.status==='confirmed' ?`<button class="act-btn notify"   onclick="notifyWA('${b.id}')">Notify</button>`:''}
       </td>
-    </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:2rem;">No bookings found</td></tr>';
+    </tr>`).join('')||'<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:2rem;">No bookings found</td></tr>';
 
-  const pg = document.getElementById('bkPagination');
-  pg.innerHTML = '';
-  for(let i=1;i<=total;i++){
-    const btn=document.createElement('button');
-    btn.textContent=i; btn.className=i===page?'active':'';
-    btn.onclick=()=>renderBookings(i);
-    pg.appendChild(btn);
-  }
+  const pg=document.getElementById('bkPagination');
+  pg.innerHTML='';
+  for(let i=1;i<=total;i++){const btn=document.createElement('button');btn.textContent=i;btn.className=i===page?'active':'';btn.onclick=()=>renderBookings(i);pg.appendChild(btn);}
 }
 
 // ── UPDATE STATUS ─────────────────────────────────────────
 async function updateStatus(id, newStatus) {
-  const b = bookings.find(b=>b.id===id);
-  if (!b) return showToast('Booking not found');
-  let fp = b.finalprice;
-  if (newStatus==='completed') {
-    const p = prompt(`Enter final price (RM) for ${b.fname} ${b.lname}:`, fp||'');
-    if (p===null) return;
-    fp = p.trim();
-    if (isNaN(parseFloat(fp)) && fp!=='') return showToast('Invalid price — please enter a number');
+  const b=bookings.find(b=>b.id===id);
+  if(!b) return showToast('Booking not found');
+  let fp=b.finalprice;
+  if(newStatus==='completed'){
+    const p=prompt(`Final price (RM) for ${b.fname}:`,fp||'');
+    if(p===null) return;
+    fp=p.trim();
+    if(isNaN(parseFloat(fp))&&fp!=='') return showToast('Invalid price');
   }
-  b.status = newStatus;
-  if (fp!==undefined) b.finalprice = fp;
-  await postToSheet({ type:'updateStatus', id, status:newStatus, finalPrice:fp||'' });
+  b.status=newStatus;
+  if(fp!==undefined) b.finalprice=fp;
+  await postToSheet({type:'updateStatus',id,status:newStatus,finalPrice:fp||''});
   updateStats(); renderBookings(); renderCustomers(); renderAnalytics();
   showToast(`Booking ${id} marked as ${newStatus} ✦`);
 }
 
-// ── EDIT BOOKING ──────────────────────────────────────────
+// ── EDIT / DELETE ─────────────────────────────────────────
 async function editBooking(id) {
-  const b = bookings.find(b=>b.id===id);
-  if (!b) return;
+  const b=bookings.find(b=>b.id===id); if(!b) return;
   const name=prompt('Full name:',`${b.fname} ${b.lname}`); if(name===null) return;
   const [fname,...rest]=name.split(' '); b.fname=fname; b.lname=rest.join(' ')||'';
   const svc=prompt('Service:',b.service); if(svc===null) return; b.service=svc;
@@ -551,36 +623,31 @@ async function editBooking(id) {
   updateStats(); renderBookings(); renderCustomers(); renderAnalytics();
   showToast('Booking updated ✦');
 }
-
-// ── DELETE BOOKING ────────────────────────────────────────
 async function deleteBooking(id) {
-  if (!confirm(`Delete booking ${id}? This cannot be undone.`)) return;
-  bookings = bookings.filter(b=>b.id!==id);
+  if(!confirm(`Delete booking ${id}?`)) return;
+  bookings=bookings.filter(b=>b.id!==id);
   await postToSheet({type:'deleteBooking',id});
   updateStats(); renderBookings(); renderCustomers(); renderAnalytics();
   showToast('Booking deleted ✦');
 }
 
-// ── NOTIFY VIA WHATSAPP (Fix 4: fixed b.notes reference) ──
+// ── NOTIFY WHATSAPP ───────────────────────────────────────
 function notifyWA(id) {
-  const b = bookings.find(b => b.id === id);
-  if (!b) { showToast('Booking not found'); return; }
-  if (!b.phone || b.phone.replace(/\D/g,'').length < 8) {
-    showToast('No valid phone number for this booking'); return;
-  }
-  const phone = b.phone.replace(/\D/g,'');
-  const msg = encodeURIComponent(
-    `Hi ${b.fname}! 😊\n\nYour appointment with Nails by Rey is confirmed!\n\n` +
-    `📅 Date: ${b.date}\n⏰ Time: ${b.time}\n💅 Service: ${b.service}\n` +
-    (b.notes ? `📝 Notes: ${b.notes}\n` : '') +
-    `📍 Location: Unit A-18-3A (https://maps.app.goo.gl/pKYsayT8kuYmVUCH9)\n\n` +
-    `See you soon! — Rey 💅`
+  const b=bookings.find(b=>b.id===id);
+  if(!b){showToast('Booking not found');return;}
+  if(!b.phone||b.phone.replace(/\D/g,'').length<8){showToast('No valid phone number');return;}
+  const phone=b.phone.replace(/\D/g,'');
+  const msg=encodeURIComponent(
+    `Hi ${b.fname}! 😊\n\nYour appointment with Nails by Rey is confirmed!\n\n`+
+    `📅 Date: ${b.date}\n⏰ Time: ${b.time}\n💅 Service: ${b.service}\n`+
+    (b.notes?`📝 Notes: ${b.notes}\n`:'')+
+    `📍 Location: Kajang Utama (Home-based)\nhttps://maps.app.goo.gl/pKYsayT8kuYmVUCH9\n\nSee you soon! — Rey 💅`
   );
-  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+  window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
   showToast(`WhatsApp opened for ${b.fname} ✦`);
 }
 
-// ── MANUAL ADD BOOKING ────────────────────────────────────
+// ── MANUAL ADD ────────────────────────────────────────────
 async function addManualBooking() {
   const name=prompt('Customer full name:'); if(!name||!name.trim()) return;
   const svc=prompt('Service(s):');          if(!svc||!svc.trim())   return;
@@ -588,7 +655,7 @@ async function addManualBooking() {
   const tm=prompt('Time (e.g. 14:00):');    if(!tm||!tm.trim())     return;
   const ph=prompt('Phone (e.g. +60123456789):','+')||'+';
   const st=prompt('Status:','pending')||'pending';
-  let fp='', fs='';
+  let fp='',fs='';
   if(st==='completed'){fs=prompt('Final service:',svc)||svc;fp=prompt('Final price (RM):','')||'';}
   const [fname,...rest]=name.trim().split(' ');
   const newId=await getNextId();
@@ -599,74 +666,68 @@ async function addManualBooking() {
   showToast(`Booking ${newId} added ✦`);
 }
 
-// ── CUSTOMERS TABLE (Fix 5: group by phone only, latest name) ──
+// ── CUSTOMERS ─────────────────────────────────────────────
 function buildCustomerMap() {
-  const map = {};
-  // Sort bookings by date+time ascending first so latest overwrites earlier
-  const sorted = [...bookings].sort((a,b) => {
-    const da = (a.date||'') + ' ' + (a.time||'');
-    const db = (b.date||'') + ' ' + (b.time||'');
-    return da.localeCompare(db);
-  });
-  sorted.forEach(b => {
-    if (b.status !== 'completed') return;
-    const phone = (b.phone || '').replace(/\D/g,'');
-    if (!phone) return;
-    if (!map[phone]) {
-      map[phone] = { name: `${b.fname} ${b.lname}`.trim(), phone: b.phone, visits: 0, lastService: '', lastDate: '', spent: 0, allServices: [] };
-    }
-    // Always update to latest name and service (sorted ascending so last write = most recent)
-    map[phone].name = `${b.fname} ${b.lname}`.trim();
-    map[phone].lastService = b.finalservice || b.service;
-    map[phone].lastDate = b.date;
+  const map={};
+  const sorted=[...bookings].sort((a,b)=>((a.date||'')+' '+(a.time||'')).localeCompare((b.date||'')+' '+(b.time||'')));
+  sorted.forEach(b=>{
+    if(b.status!=='completed') return;
+    const phone=(b.phone||'').replace(/\D/g,'');
+    if(!phone) return;
+    if(!map[phone]) map[phone]={name:`${b.fname} ${b.lname}`.trim(),phone:b.phone,visits:0,lastService:'',spent:0,allServices:[]};
+    map[phone].name=`${b.fname} ${b.lname}`.trim();
+    map[phone].lastService=b.finalservice||b.service;
     map[phone].visits++;
-    map[phone].spent += parseFloat(b.finalprice) || 0;
-    // Collect all unique services
-    const svcs = (b.finalservice || b.service).split(',').map(s=>s.trim()).filter(Boolean);
-    svcs.forEach(s => { if (!map[phone].allServices.includes(s)) map[phone].allServices.push(s); });
+    map[phone].spent+=parseFloat(b.finalprice)||0;
+    const svcs=(b.finalservice||b.service).split(',').map(s=>s.trim()).filter(Boolean);
+    svcs.forEach(s=>{if(!map[phone].allServices.includes(s))map[phone].allServices.push(s);});
   });
   return map;
 }
 
 function renderCustomers(page=1) {
-  // Fix 2: search by name, phone, service
-  const q = (document.getElementById('custSearch').value||'').toLowerCase();
-  const map = buildCustomerMap();
-  let customers = Object.values(map).sort((a,b)=>b.spent-a.spent);
-  if (q) customers = customers.filter(c =>
-    c.name.toLowerCase().includes(q) ||
-    c.phone.includes(q) ||
-    c.allServices.join(' ').toLowerCase().includes(q)
-  );
+  const q=(document.getElementById('custSearch').value||'').toLowerCase();
+  const map=buildCustomerMap();
+  let customers=Object.values(map);
+  if(q) customers=customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)||c.allServices.join(' ').toLowerCase().includes(q));
+
+  // Sort — map key names to customer object keys
+  const sortKeyMap={name:'name',phone:'phone',visits:'visits',service:'allServices',spent:'spent'};
+  const sk=sortKeyMap[custSortCol]||'spent';
+  customers=customers.sort((a,b)=>{
+    let va=sk==='allServices'?a.allServices.join(','):a[sk];
+    let vb=sk==='allServices'?b.allServices.join(','):b[sk];
+    const na=parseFloat(va),nb=parseFloat(vb);
+    if(!isNaN(na)&&!isNaN(nb)) return custSortDir==='asc'?na-nb:nb-na;
+    return custSortDir==='asc'?String(va).localeCompare(String(vb)):String(vb).localeCompare(String(va));
+  });
+
   const total=Math.ceil(customers.length/PAGE_SIZE)||1;
   page=Math.min(page,total);
   const paged=customers.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
 
-  document.getElementById('customersTbody').innerHTML = paged.map(c=>`
+  document.getElementById('customersTbody').innerHTML=paged.map(c=>`
     <tr>
       <td>${c.name}</td>
       <td style="font-size:0.8rem;color:rgba(255,255,255,0.5);">${c.phone}</td>
       <td>${c.visits}</td>
       <td style="max-width:200px;word-break:break-word;font-size:0.8rem;">${c.allServices.join(', ')}</td>
       <td>${fmtRM(c.spent)}</td>
-    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:2rem;">No completed bookings yet</td></tr>';
+    </tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:2rem;">No completed bookings yet</td></tr>';
 
   const pg=document.getElementById('custPagination');
   pg.innerHTML='';
-  for(let i=1;i<=total;i++){
-    const btn=document.createElement('button'); btn.textContent=i; btn.className=i===page?'active':'';
-    btn.onclick=()=>renderCustomers(i); pg.appendChild(btn);
-  }
+  for(let i=1;i<=total;i++){const btn=document.createElement('button');btn.textContent=i;btn.className=i===page?'active':'';btn.onclick=()=>renderCustomers(i);pg.appendChild(btn);}
 }
 
-// ── CSV EXPORT ────────────────────────────────────────────
-function exportCSV() {
+// ── CSV ───────────────────────────────────────────────────
+function exportCSV(){
   const h=['ID','First Name','Last Name','Phone','Service','Date','Time','Notes','Status','Final Service','Final Price'];
   const rows=bookings.map(b=>BOOKING_COLS.map(col=>b[col]||''));
   dlCSV([h,...rows].map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n'),'bookings.csv');
   showToast('CSV exported ✦');
 }
-function exportCustomersCSV() {
+function exportCustomersCSV(){
   const map=buildCustomerMap();
   const h=['Name','Phone','Visits','All Services','Last Service','Total Spent (RM)'];
   const rows=Object.values(map).map(c=>[c.name,c.phone,c.visits,c.allServices.join('; '),c.lastService,c.spent.toFixed(0)]);
@@ -676,131 +737,167 @@ function exportCustomersCSV() {
 function dlCSV(content,filename){
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8;'}));
-  a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+  a.download=filename;a.click();URL.revokeObjectURL(a.href);
 }
 
 // ══════════════════════════════════════════════════════════
-//  ANALYTICS (Fix 7)
+//  ANALYTICS
 // ══════════════════════════════════════════════════════════
 let revChartInst=null, wdWeChartInst=null, retChartInst=null;
 let revPeriod='daily', retPeriod='daily';
 
-const CHART_DEFAULTS = {
-  responsive:true, maintainAspectRatio:false,
-  plugins:{ legend:{ labels:{ color:'rgba(255,255,255,0.6)', font:{size:11} } } },
+const CHART_DEFAULTS={
+  responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{color:'rgba(255,255,255,0.6)',font:{size:11}}}},
   scales:{
-    x:{ ticks:{color:'rgba(255,255,255,0.4)',font:{size:10}}, grid:{color:'rgba(255,255,255,0.04)'} },
-    y:{ ticks:{color:'rgba(255,255,255,0.4)',font:{size:10}}, grid:{color:'rgba(255,255,255,0.06)'} }
+    x:{ticks:{color:'rgba(255,255,255,0.4)',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
+    y:{ticks:{color:'rgba(255,255,255,0.4)',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}
   }
 };
 
-function setRevPeriod(p, btn) {
+function setRevPeriod(p,btn){
   revPeriod=p;
-  document.querySelectorAll('#tab-analytics .chart-card:first-child .chart-ctrl-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('[id^="revBtn-"]').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderRevChart();
 }
-function setRetPeriod(p, btn) {
+function setRetPeriod(p,btn){
   retPeriod=p;
-  document.querySelectorAll('#tab-analytics .chart-card:last-child .chart-ctrl-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('[id^="retBtn-"]').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderRetChart();
 }
 
-function getPeriodKey(dateStr, period) {
-  if (!dateStr) return 'Unknown';
-  const d = new Date(dateStr+'T00:00:00');
-  if (isNaN(d)) return 'Unknown';
-  if (period==='daily')   return dateStr;
-  if (period==='weekly')  {
-    const jan1 = new Date(d.getFullYear(),0,1);
-    const wk = Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
-    return `${d.getFullYear()}-W${String(wk).padStart(2,'0')}`;
-  }
-  if (period==='monthly') return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-  if (period==='yearly')  return `${d.getFullYear()}`;
+function getPeriodKey(dateStr,period){
+  if(!dateStr) return 'Unknown';
+  const d=new Date(dateStr+'T00:00:00');
+  if(isNaN(d)) return 'Unknown';
+  if(period==='daily')  return dateStr;
+  if(period==='weekly') {const jan1=new Date(d.getFullYear(),0,1);const wk=Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);return `${d.getFullYear()}-W${String(wk).padStart(2,'0')}`;}
+  if(period==='monthly') return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  if(period==='yearly')  return `${d.getFullYear()}`;
   return dateStr;
 }
 
-function renderAnalytics() {
+function renderAnalytics(){
   renderRevChart();
   renderWdWeChart();
   renderTopServices();
   renderRetChart();
 }
 
-function renderRevChart() {
-  const completed = bookings.filter(b=>b.status==='completed' && b.date);
+function renderRevChart(){
+  const completed=bookings.filter(b=>b.status==='completed'&&b.date);
   const map={};
-  completed.forEach(b=>{
-    const key=getPeriodKey(b.date, revPeriod);
-    map[key]=(map[key]||0)+(parseFloat(b.finalprice)||0);
-  });
+  completed.forEach(b=>{const k=getPeriodKey(b.date,revPeriod);map[k]=(map[k]||0)+(parseFloat(b.finalprice)||0);});
   const labels=Object.keys(map).sort();
   const data=labels.map(k=>map[k]);
-
-  if (revChartInst) revChartInst.destroy();
+  if(revChartInst) revChartInst.destroy();
   const ctx=document.getElementById('revChart').getContext('2d');
   revChartInst=new Chart(ctx,{
-    type: revPeriod==='yearly'?'bar':'line',
+    type:revPeriod==='yearly'?'bar':'line',
+    data:{labels,datasets:[{label:'Revenue (RM)',data,borderColor:'#c97d8e',backgroundColor:revPeriod==='yearly'?'rgba(201,125,142,0.4)':'rgba(201,125,142,0.1)',pointBackgroundColor:'#f2c4ce',fill:true,tension:0.4}]},
+    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{callbacks:{label:ctx=>'RM '+ctx.parsed.y.toLocaleString('en-MY')}}},scales:{...CHART_DEFAULTS.scales,y:{...CHART_DEFAULTS.scales.y,ticks:{...CHART_DEFAULTS.scales.y.ticks,callback:v=>'RM '+v.toLocaleString('en-MY')}}}}
+  });
+}
+
+// ── FIX 1: Hours calculation ──────────────────────────────
+// For each day, group slots, sort them, merge overlapping 2-hr windows
+// eg: [11:00, 13:30, 15:00] → 11:00–13:30(2.5h but capped by next)→13:30-15:00(1.5h)→15:00-17:00(2h) = 5.5h
+function calcHoursForBookings(bkList) {
+  // Group by date
+  const byDate = {};
+  bkList.forEach(b => {
+    if (!b.date || !b.time) return;
+    if (!byDate[b.date]) byDate[b.date] = [];
+    byDate[b.date].push(timeToMinutes(b.time));
+  });
+  let totalHours = 0;
+  Object.values(byDate).forEach(slots => {
+    const sorted = slots.filter(m => m >= 0).sort((a,b) => a-b);
+    for (let i = 0; i < sorted.length; i++) {
+      const start = sorted[i];
+      const nextSlot = sorted[i+1]; // next booking start
+      const end = start + 120; // default 2hr
+      // If next slot starts before end, cap this session at next slot start
+      const actualEnd = (nextSlot !== undefined && nextSlot < end) ? nextSlot : end;
+      totalHours += (actualEnd - start) / 60;
+    }
+  });
+  return totalHours;
+}
+
+function timeToMinutes(t) {
+  if(!t) return -1;
+  t=String(t).trim();
+  if(/^\d{1,2}:\d{2}$/.test(t)){const[h,m]=t.split(':').map(Number);return h*60+m;}
+  const parts=t.split(' ');const ampm=parts[1];
+  let[h,m]=parts[0].split(':').map(Number);
+  if(ampm==='PM'&&h!==12)h+=12;
+  if(ampm==='AM'&&h===12)h=0;
+  return h*60+m;
+}
+
+// Fix 1: Pie chart for revenue, bar chart removed, hours added
+function renderWdWeChart(){
+  let wdRev=0,wdCnt=0,weRev=0,weCnt=0;
+  const wdBookings=[],weBookings=[];
+  bookings.filter(b=>b.status==='completed'&&b.date).forEach(b=>{
+    const day=new Date(b.date+'T00:00:00').getDay();
+    const fp=parseFloat(b.finalprice)||0;
+    if(day>=1&&day<=5){wdRev+=fp;wdCnt++;wdBookings.push(b);}
+    else{weRev+=fp;weCnt++;weBookings.push(b);}
+  });
+
+  const wdHrs=calcHoursForBookings(wdBookings);
+  const weHrs=calcHoursForBookings(weBookings);
+  const wdRPH=wdHrs>0?(wdRev/wdHrs):0;
+  const weRPH=weHrs>0?(weRev/weHrs):0;
+
+  document.getElementById('wdRevenue').textContent=fmtRM(wdRev);
+  document.getElementById('wdCount').textContent=wdCnt;
+  document.getElementById('weRevenue').textContent=fmtRM(weRev);
+  document.getElementById('weCount').textContent=weCnt;
+  document.getElementById('wdHours').textContent=fmtHr(wdHrs);
+  document.getElementById('weHours').textContent=fmtHr(weHrs);
+  document.getElementById('wdRevPerHour').textContent=wdRPH?`${fmtRM(wdRPH)}/hr avg`:'—';
+  document.getElementById('weRevPerHour').textContent=weRPH?`${fmtRM(weRPH)}/hr avg`:'—';
+
+  if(wdWeChartInst) wdWeChartInst.destroy();
+  const ctx=document.getElementById('wdWeChart').getContext('2d');
+  // Pie chart — only show if there's data
+  const total=wdRev+weRev;
+  wdWeChartInst=new Chart(ctx,{
+    type:'pie',
     data:{
-      labels,
+      labels:['Weekday Revenue','Weekend Revenue'],
       datasets:[{
-        label:'Revenue (RM)',
-        data,
-        borderColor:'#c97d8e',
-        backgroundColor: revPeriod==='yearly' ? 'rgba(201,125,142,0.4)' : 'rgba(201,125,142,0.1)',
-        pointBackgroundColor:'#f2c4ce',
-        fill:true,
-        tension:0.4
+        data:[wdRev,weRev],
+        backgroundColor:['rgba(201,125,142,0.75)','rgba(201,169,110,0.75)'],
+        borderColor:['#c97d8e','#c9a96e'],
+        borderWidth:1.5
       }]
     },
     options:{
-      ...CHART_DEFAULTS,
+      responsive:true,maintainAspectRatio:false,
       plugins:{
-        ...CHART_DEFAULTS.plugins,
-        tooltip:{callbacks:{label:ctx=>'RM '+ctx.parsed.y.toLocaleString('en-MY')}}
-      },
-      scales:{
-        ...CHART_DEFAULTS.scales,
-        y:{...CHART_DEFAULTS.scales.y, ticks:{...CHART_DEFAULTS.scales.y.ticks, callback:v=>'RM '+v.toLocaleString('en-MY')}}
+        legend:{labels:{color:'rgba(255,255,255,0.6)',font:{size:11}}},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const val=ctx.parsed;
+            const pct=total>0?((val/total)*100).toFixed(1):'0';
+            // Determine RM/hr for this slice
+            const rph=ctx.dataIndex===0?wdRPH:weRPH;
+            const rphStr=rph>0?`  ·  ${fmtRM(rph)}/hr avg`:'';
+            return ` ${fmtRM(val)} (${pct}%)${rphStr}`;
+          }
+        }}
       }
     }
   });
 }
 
-function renderWdWeChart() {
-  let wdRev=0, wdCnt=0, weRev=0, weCnt=0;
-  bookings.filter(b=>b.status==='completed' && b.date).forEach(b=>{
-    const day=new Date(b.date+'T00:00:00').getDay();
-    const fp=parseFloat(b.finalprice)||0;
-    if(day>=1&&day<=5){wdRev+=fp;wdCnt++;}else{weRev+=fp;weCnt++;}
-  });
-  document.getElementById('wdRevenue').textContent=fmtRM(wdRev);
-  document.getElementById('wdCount').textContent=wdCnt;
-  document.getElementById('weRevenue').textContent=fmtRM(weRev);
-  document.getElementById('weCount').textContent=weCnt;
-
-  if(wdWeChartInst) wdWeChartInst.destroy();
-  const ctx=document.getElementById('wdWeChart').getContext('2d');
-  wdWeChartInst=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['Revenue (RM)','Bookings'],
-      datasets:[
-        {label:'Weekday',data:[wdRev,wdCnt],backgroundColor:'rgba(201,125,142,0.7)',borderRadius:6},
-        {label:'Weekend',data:[weRev,weCnt],backgroundColor:'rgba(201,169,110,0.7)',borderRadius:6}
-      ]
-    },
-    options:{
-      ...CHART_DEFAULTS,
-      plugins:{...CHART_DEFAULTS.plugins,tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+(ctx.dataIndex===0?'RM '+ctx.parsed.y.toLocaleString('en-MY'):ctx.parsed.y)}}},
-      scales:{...CHART_DEFAULTS.scales,y:{...CHART_DEFAULTS.scales.y,ticks:{...CHART_DEFAULTS.scales.y.ticks,callback:v=>v.toLocaleString('en-MY')}}}
-    }
-  });
-}
-
-function renderTopServices() {
+function renderTopServices(){
   const svcMap={};
   bookings.filter(b=>b.status==='completed').forEach(b=>{
     const svcs=(b.finalservice||b.service||'').split(',').map(s=>s.trim()).filter(Boolean);
@@ -818,23 +915,21 @@ function renderTopServices() {
     </div>`).join('');
 }
 
-function renderRetChart() {
+function renderRetChart(){
   const active=['pending','confirmed','completed'];
-  const mapActive={}, mapCancelled={};
+  const mapActive={},mapCancelled={};
   bookings.filter(b=>b.date).forEach(b=>{
-    const key=getPeriodKey(b.date,retPeriod);
-    if(active.includes(b.status)) mapActive[key]=(mapActive[key]||0)+1;
-    if(b.status==='cancelled')    mapCancelled[key]=(mapCancelled[key]||0)+1;
+    const k=getPeriodKey(b.date,retPeriod);
+    if(active.includes(b.status)) mapActive[k]=(mapActive[k]||0)+1;
+    if(b.status==='cancelled')    mapCancelled[k]=(mapCancelled[k]||0)+1;
   });
   const allKeys=[...new Set([...Object.keys(mapActive),...Object.keys(mapCancelled)])].sort();
-
-  const totalActive=Object.values(mapActive).reduce((s,v)=>s+v,0);
-  const totalCancelled=Object.values(mapCancelled).reduce((s,v)=>s+v,0);
-  const total=totalActive+totalCancelled;
-  document.getElementById('retActive').textContent=totalActive;
-  document.getElementById('retCancelled').textContent=totalCancelled;
-  document.getElementById('retRate').textContent=total?((totalActive/total)*100).toFixed(1)+'%':'—';
-
+  const totA=Object.values(mapActive).reduce((s,v)=>s+v,0);
+  const totC=Object.values(mapCancelled).reduce((s,v)=>s+v,0);
+  const tot=totA+totC;
+  document.getElementById('retActive').textContent=totA;
+  document.getElementById('retCancelled').textContent=totC;
+  document.getElementById('retRate').textContent=tot?((totA/tot)*100).toFixed(1)+'%':'—';
   if(retChartInst) retChartInst.destroy();
   const ctx=document.getElementById('retChart').getContext('2d');
   retChartInst=new Chart(ctx,{
@@ -851,23 +946,21 @@ function renderRetChart() {
 }
 
 // ── GALLERY MANAGER ───────────────────────────────────────
-async function loadGalleryFromSheet() {
-  try {
+async function loadGalleryFromSheet(){
+  try{
     const url=`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Gallery!A:D?key=${API_KEY}`;
-    const res=await fetch(url); const json=await res.json();
+    const res=await fetch(url);const json=await res.json();
     if(!json.values||json.values.length<2) return [];
     const h=json.values[0].map(x=>x.toLowerCase());
     return json.values.slice(1).map(row=>h.reduce((o,k,i)=>{o[k]=row[i]||'';return o;},{}));
-  } catch { return []; }
+  }catch{return [];}
 }
-
-async function renderGalleryManager() {
+async function renderGalleryManager(){
   const grid=document.getElementById('galleryMgrGrid');
   if(!grid) return;
   grid.innerHTML='<div class="mgr-empty">Loading...</div>';
   const photos=await loadGalleryFromSheet();
-  // Fix 6: No gallery count shown
-  if(!photos.length){ grid.innerHTML='<div class="mgr-empty">No photos uploaded yet. Use the upload zone above.</div>'; return; }
+  if(!photos.length){grid.innerHTML='<div class="mgr-empty">No photos uploaded yet.</div>';return;}
   grid.innerHTML=photos.map(p=>`
     <div class="mgr-item">
       <img src="${p.url||p.dataurl||''}" alt="${p.label}" onerror="this.style.display='none'">
@@ -875,7 +968,6 @@ async function renderGalleryManager() {
       <button class="mgr-del" onclick="deletePhoto('${p.id}')">✕</button>
     </div>`).join('');
 }
-
 let pendingFiles=[],pendingIndex=0;
 function handleFileSelect(files){if(files.length){pendingFiles=Array.from(files);pendingIndex=0;loadNextPending();}}
 function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('dragover');handleFileSelect(e.dataTransfer.files);}
@@ -885,7 +977,7 @@ function loadNextPending(){
   const reader=new FileReader();
   reader.onload=ev=>{
     const prev=document.getElementById('uploadPreview');
-    prev.src=ev.target.result; prev.style.display='block'; prev._dataUrl=ev.target.result;
+    prev.src=ev.target.result;prev.style.display='block';prev._dataUrl=ev.target.result;
     document.getElementById('photoTitle').value=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
     document.getElementById('uploadMeta').style.display='flex';
     document.getElementById('uploadZone').style.display='none';
@@ -898,14 +990,14 @@ async function savePhoto(){
   const data=document.getElementById('uploadPreview')._dataUrl;
   if(!data) return;
   const btn=document.getElementById('uploadBtn');
-  btn.textContent='Uploading...'; btn.disabled=true;
-  try {
+  btn.textContent='Uploading...';btn.disabled=true;
+  try{
     let url=data;
     if(IMGBB_API_KEY&&IMGBB_API_KEY!=='YOUR_IMGBB_API_KEY'){
-      const fd=new FormData(); fd.append('image',data.split(',')[1]);
+      const fd=new FormData();fd.append('image',data.split(',')[1]);
       const res=await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,{method:'POST',body:fd});
       const json=await res.json();
-      if(!json.success) throw new Error(json.error?.message||'ImgBB upload failed');
+      if(!json.success) throw new Error(json.error?.message||'ImgBB failed');
       url=json.data.url;
     }
     const record={id:'u'+Date.now(),label:title,tag,url};
@@ -914,7 +1006,7 @@ async function savePhoto(){
     if(pendingIndex<pendingFiles.length){loadNextPending();showToast(`Saved! ${pendingFiles.length-pendingIndex} more to go.`);}
     else{cancelUpload();showToast('Photo added to gallery ✦');}
     await renderGalleryManager();
-  } catch(err){showToast('Upload failed: '+err.message);}
+  }catch(err){showToast('Upload failed: '+err.message);}
   finally{btn.textContent='Upload to Gallery';btn.disabled=false;}
 }
 function cancelUpload(){
@@ -926,20 +1018,20 @@ function cancelUpload(){
   document.getElementById('photoInput').value='';
 }
 async function deletePhoto(id){
-  if(!confirm('Remove this photo from the gallery?')) return;
+  if(!confirm('Remove this photo?')) return;
   await postToSheet({type:'deleteGallery',id});
   showToast('Photo removed');
   await renderGalleryManager();
 }
 async function clearAllPhotos(){
-  if(!confirm('Remove ALL photos? This cannot be undone.')) return;
+  if(!confirm('Remove ALL photos? Cannot be undone.')) return;
   await postToSheet({type:'clearGallery'});
   showToast('Gallery cleared');
   await renderGalleryManager();
 }
 
 // ── TABS ──────────────────────────────────────────────────
-function switchTab(id, btn){
+function switchTab(id,btn){
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
@@ -950,7 +1042,7 @@ function switchTab(id, btn){
 // ── TOAST ─────────────────────────────────────────────────
 function showToast(msg){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
+  t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
 }
 
