@@ -166,7 +166,7 @@
     <input class="gate-input" type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="gate-btn" onclick="doLogin()">Enter Dashboard</button>
     <div class="gate-error" id="loginError">Incorrect password. Please try again.</div>
-    <div class="gate-hint">Default: <code>nailsbyrey2025</code> — change before deploying.</div>
+    <div class="gate-hint">Default: <code>E*******!</code> — change before deploying.</div>
   </div>
 </div>
 
@@ -369,7 +369,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQTtTa5Sedarlv
 const API_KEY         = 'AIzaSyCSof22kUg19D6wdd0PYXmUPkA71x-sFhU';
 const SPREADSHEET_ID  = '1nbQzt6TzZ4fi0mt1_v4sAsOO9ZIFyMHiGWUz61NVz7s';
 const IMGBB_API_KEY   = 'ee8cadb535db992cb5cd149c81eedf20';
-const ADMIN_PASSWORD  = 'nailsbyrey2025';
+const ADMIN_PASSWORD  = 'Eden1008!';
 const PAGE_SIZE       = 15;
 const BOOKING_COLS    = ['id','fname','lname','phone','service','date','time','notes','status','finalservice','finalprice'];
 
@@ -641,7 +641,7 @@ function notifyWA(id) {
     `Hi ${b.fname}! 😊\n\nYour appointment with Nails by Rey is confirmed!\n\n`+
     `📅 Date: ${b.date}\n⏰ Time: ${b.time}\n💅 Service: ${b.service}\n`+
     (b.notes?`📝 Notes: ${b.notes}\n`:'')+
-    `📍 Location: Kajang Utama (Home-based)\nhttps://maps.app.goo.gl/pKYsayT8kuYmVUCH9\n\nSee you soon! — Rey 💅`
+    `📍 Location: Unit A-18-3A (https://maps.app.goo.gl/pKYsayT8kuYmVUCH9)\n\nSee you soon! — Rey 💅`
   );
   window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
   showToast(`WhatsApp opened for ${b.fname} ✦`);
