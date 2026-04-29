@@ -64,8 +64,6 @@
   .tbl-input::placeholder{color:rgba(255,255,255,0.3);}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   table{width:100%;border-collapse:collapse;font-size:0.84rem;}
-
-  /* Fix 3: sortable th */
   th{text-align:left;padding:0.7rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);font-weight:400;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none;transition:color 0.15s;}
   th:hover{color:rgba(255,255,255,0.75);}
   th.sort-asc::after{content:' ▲';font-size:0.6rem;color:var(--rose);}
@@ -136,7 +134,6 @@
   .toast{position:fixed;bottom:2rem;right:2rem;background:var(--rose-dark);color:white;padding:0.85rem 1.4rem;border-radius:10px;font-size:0.85rem;box-shadow:0 8px 30px rgba(0,0,0,0.3);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:999;}
   .toast.show{transform:translateY(0);opacity:1;}
 
-  /* Fix 2: responsive orientation */
   @media(max-width:768px){
     .dash-header{padding:1rem;}
     .dash-body{padding:1rem;}
@@ -147,7 +144,6 @@
     .stats-grid{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));}
     .analytics-grid-2{grid-template-columns:1fr;}
   }
-  /* Fix 2: also handle landscape on short screens */
   @media(max-height:500px) and (orientation:landscape){
     .dash-body{padding:0.8rem;}
     .stats-grid{grid-template-columns:repeat(auto-fit,minmax(90px,1fr));}
@@ -200,8 +196,6 @@
 
     <!-- ═══ ANALYTICS TAB ═══ -->
     <div class="tab-panel active" id="tab-analytics">
-
-      <!-- Revenue Trend -->
       <div class="chart-card">
         <div class="chart-header">
           <div class="chart-title">📈 Revenue Trend</div>
@@ -215,12 +209,9 @@
         <div class="chart-wrap"><canvas id="revChart"></canvas></div>
       </div>
 
-      <!-- Weekday vs Weekend — Fix 1: pie chart + hours -->
       <div class="analytics-grid-2">
         <div class="chart-card">
           <div class="chart-header"><div class="chart-title">📅 Weekday vs Weekend Performance</div></div>
-
-          <!-- Stats row: 4 cards — revenue + hours for each -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.2rem;">
             <div class="perf-card">
               <div class="perf-val" id="wdRevenue">RM 0</div>
@@ -241,19 +232,15 @@
               <div class="perf-sub" id="weRevPerHour">— RM/hr</div>
             </div>
           </div>
-
-          <!-- Fix 1: Pie chart for revenue split, tooltip shows avg RM/hr -->
           <div class="chart-wrap-sm"><canvas id="wdWeChart"></canvas></div>
         </div>
 
-        <!-- Top Services -->
         <div class="chart-card">
           <div class="chart-header"><div class="chart-title">🌸 Top Services (Completed)</div></div>
           <div class="service-bar-wrap" id="topServicesBars"></div>
         </div>
       </div>
 
-      <!-- Retention -->
       <div class="chart-card">
         <div class="chart-header">
           <div class="chart-title">💖 Customer Retention (Active vs Cancelled)</div>
@@ -280,7 +267,6 @@
         </div>
         <div class="chart-wrap"><canvas id="retChart"></canvas></div>
       </div>
-
     </div><!-- end analytics -->
 
     <!-- ═══ BOOKINGS TAB ═══ -->
@@ -290,15 +276,20 @@
           <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
           <button class="add-btn" onclick="addManualBooking()">➕ Add Booking</button>
         </div>
-        <div class="toolbar-right">
-          <input class="tbl-input" id="bookingSearch" placeholder="Search name, phone or service..." oninput="renderBookings(1)">
+        <div class="toolbar-right" style="gap:0.5rem;flex-wrap:wrap;">
+          <select id="statusFilter" onchange="renderBookings(1)" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 0.9rem;color:white;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;cursor:pointer;">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <input class="tbl-input" id="bookingSearch" placeholder="Search name, phone or service..." oninput="renderBookings(1)" style="width:220px;">
         </div>
       </div>
       <div class="tbl-wrap">
         <table id="bookingsTable">
-          <thead><tr id="bookingsThead">
-            <!-- Fix 3: headers rendered by JS with sort indicators -->
-          </tr></thead>
+          <thead><tr id="bookingsThead"></tr></thead>
           <tbody id="bookingsTbody"></tbody>
         </table>
       </div>
@@ -310,6 +301,7 @@
       <div class="table-toolbar">
         <div class="toolbar-left">
           <button class="export-btn" onclick="exportCustomersCSV()">📥 Export CSV</button>
+          <span id="custRowCount" style="font-size:0.78rem;color:rgba(255,255,255,0.35);padding:0 0.3rem;"></span>
         </div>
         <div class="toolbar-right">
           <input class="tbl-input" id="custSearch" placeholder="Search name, phone or service..." oninput="renderCustomers(1)">
@@ -317,9 +309,7 @@
       </div>
       <div class="tbl-wrap">
         <table id="customersTable">
-          <thead><tr id="customersThead">
-            <!-- Fix 3: headers rendered by JS -->
-          </tr></thead>
+          <thead><tr id="customersThead"></tr></thead>
           <tbody id="customersTbody"></tbody>
         </table>
       </div>
@@ -410,9 +400,7 @@ if (sessionStorage.getItem('nbrAdmin')) {
   document.getElementById('dashboard').style.display = 'block';
 }
 
-// Fix 2: resize handler — recompute layout on orientation change
 window.addEventListener('resize', () => {
-  // Destroy and re-render charts when orientation changes so canvas resizes properly
   if (document.getElementById('tab-analytics').classList.contains('active')) {
     clearTimeout(window._resizeTimer);
     window._resizeTimer = setTimeout(() => { renderAnalytics(); }, 200);
@@ -489,9 +477,9 @@ function updateStats() {
 }
 
 // ══════════════════════════════════════════════════════════
-//  FIX 3: SORTABLE TABLE HEADERS
+//  SORTABLE TABLE HEADERS
 // ══════════════════════════════════════════════════════════
-let bkSortCol='date', bkSortDir='desc';
+let bkSortCol='date', bkSortDir='desc';  // default: latest date first
 let custSortCol='spent', custSortDir='desc';
 
 const BK_COLS = [
@@ -502,7 +490,7 @@ const BK_COLS = [
   { key:'phone',      label:'Phone' },
   { key:'status',     label:'Status' },
   { key:'finalprice', label:'Final Price' },
-  { key:null,         label:'Actions',  noSort:true }
+  { key:null,         label:'Actions', noSort:true }
 ];
 const CUST_COLS = [
   { key:'name',    label:'Name' },
@@ -523,25 +511,64 @@ function renderSortHeader(trId, cols, curCol, curDir, onClickFn) {
 function initBookingsHeader()  { renderSortHeader('bookingsThead',  BK_COLS,   bkSortCol,   bkSortDir,   'sortBookings'); }
 function initCustomersHeader() { renderSortHeader('customersThead', CUST_COLS, custSortCol, custSortDir, 'sortCustomers'); }
 
+// ── FIX: sortBookings defaults date/price to desc on first click ──
 function sortBookings(col) {
-  if (bkSortCol===col) bkSortDir = bkSortDir==='asc'?'desc':'asc';
-  else { bkSortCol=col; bkSortDir='asc'; }
+  if (bkSortCol === col) {
+    bkSortDir = bkSortDir==='asc' ? 'desc' : 'asc';
+  } else {
+    bkSortCol = col;
+    // Date and price default to descending (latest/highest first)
+    bkSortDir = (col === 'date' || col === 'finalprice') ? 'desc' : 'asc';
+  }
   initBookingsHeader();
   renderBookings(1);
 }
 function sortCustomers(col) {
   if (custSortCol===col) custSortDir = custSortDir==='asc'?'desc':'asc';
-  else { custSortCol=col; custSortDir='asc'; }
+  else { custSortCol=col; custSortDir = col==='spent'||col==='visits' ? 'desc' : 'asc'; }
   initCustomersHeader();
   renderCustomers(1);
 }
 
+// ── FIX: applySort handles date+time combined, normalised ──
 function applySort(arr, col, dir) {
   return [...arr].sort((a,b) => {
+
+    // Date column: sort by date+time combined, normalise formats
+    if (col === 'date') {
+      const normalizeDate = s => {
+        if (!s) return '';
+        const parts = s.split('-');
+        if (parts.length === 3)
+          return `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+        return s;
+      };
+      const normalizeTime = t => {
+        if (!t) return '00:00';
+        t = String(t).trim();
+        // 24-hr: "14:00" or "8:30"
+        if (/^\d{1,2}:\d{2}$/.test(t)) {
+          const [h,m] = t.split(':');
+          return h.padStart(2,'0') + ':' + m.padStart(2,'0');
+        }
+        // 12-hr: "2:00 PM" / "8:30 AM"
+        const parts = t.split(' ');
+        const ampm  = parts[1] || '';
+        let [h,m]   = parts[0].split(':').map(Number);
+        if (ampm==='PM' && h!==12) h+=12;
+        if (ampm==='AM' && h===12) h=0;
+        return String(h).padStart(2,'0') + ':' + String(m||0).padStart(2,'0');
+      };
+      const va = normalizeDate(a.date) + 'T' + normalizeTime(a.time);
+      const vb = normalizeDate(b.date) + 'T' + normalizeTime(b.time);
+      return dir==='asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+
+    // Numeric sort for price
     let va = a[col]||'', vb = b[col]||'';
-    // Numeric sort for price/visits
     const na=parseFloat(va), nb=parseFloat(vb);
-    if (!isNaN(na)&&!isNaN(nb)) { return dir==='asc'?na-nb:nb-na; }
+    if (!isNaN(na)&&!isNaN(nb)) return dir==='asc'?na-nb:nb-na;
+    // String sort
     va=String(va).toLowerCase(); vb=String(vb).toLowerCase();
     return dir==='asc'?va.localeCompare(vb):vb.localeCompare(va);
   });
@@ -549,11 +576,13 @@ function applySort(arr, col, dir) {
 
 // ── BOOKINGS TABLE ────────────────────────────────────────
 function renderBookings(page=1) {
-  const q=(document.getElementById('bookingSearch').value||'').toLowerCase();
-  let list = q
-    ? bookings.filter(b=>`${b.fname} ${b.lname} ${b.phone} ${b.service} ${b.id} ${b.notes}`.toLowerCase().includes(q))
-    : bookings;
-  // Handle combined name sort
+  const q      = (document.getElementById('bookingSearch').value||'').toLowerCase();
+  const status = (document.getElementById('statusFilter').value||'').toLowerCase();
+  let list = bookings;
+  // Apply status filter first
+  if (status) list = list.filter(b => b.status === status);
+  // Then apply text search
+  if (q) list = list.filter(b => `${b.fname} ${b.lname} ${b.phone} ${b.service} ${b.id} ${b.notes}`.toLowerCase().includes(q));
   if (bkSortCol==='fname') {
     list = [...list].sort((a,b)=>{
       const na=`${a.fname} ${a.lname}`.toLowerCase(), nb=`${b.fname} ${b.lname}`.toLowerCase();
@@ -690,8 +719,6 @@ function renderCustomers(page=1) {
   const map=buildCustomerMap();
   let customers=Object.values(map);
   if(q) customers=customers.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q)||c.allServices.join(' ').toLowerCase().includes(q));
-
-  // Sort — map key names to customer object keys
   const sortKeyMap={name:'name',phone:'phone',visits:'visits',service:'allServices',spent:'spent'};
   const sk=sortKeyMap[custSortCol]||'spent';
   customers=customers.sort((a,b)=>{
@@ -702,9 +729,15 @@ function renderCustomers(page=1) {
     return custSortDir==='asc'?String(va).localeCompare(String(vb)):String(vb).localeCompare(String(va));
   });
 
-  const total=Math.ceil(customers.length/PAGE_SIZE)||1;
-  page=Math.min(page,total);
-  const paged=customers.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  // Show row count for debugging visibility
+  const countEl = document.getElementById('custRowCount');
+  if (countEl) countEl.textContent = `${customers.length} unique customer${customers.length!==1?'s':''}`;
+
+  // Fix 2: use PAGE_SIZE (15) — was correctly set but adding explicit floor to ensure no rounding issues
+  const rowsPerPage = PAGE_SIZE; // 15
+  const total = Math.max(1, Math.ceil(customers.length / rowsPerPage));
+  page = Math.min(Math.max(1, page), total);
+  const paged = customers.slice((page-1)*rowsPerPage, page*rowsPerPage);
 
   document.getElementById('customersTbody').innerHTML=paged.map(c=>`
     <tr>
@@ -717,7 +750,13 @@ function renderCustomers(page=1) {
 
   const pg=document.getElementById('custPagination');
   pg.innerHTML='';
-  for(let i=1;i<=total;i++){const btn=document.createElement('button');btn.textContent=i;btn.className=i===page?'active':'';btn.onclick=()=>renderCustomers(i);pg.appendChild(btn);}
+  for(let i=1;i<=total;i++){
+    const btn=document.createElement('button');
+    btn.textContent=i;
+    btn.className=i===page?'active':'';
+    btn.onclick=()=>renderCustomers(i);
+    pg.appendChild(btn);
+  }
 }
 
 // ── CSV ───────────────────────────────────────────────────
@@ -801,32 +840,6 @@ function renderRevChart(){
   });
 }
 
-// ── FIX 1: Hours calculation ──────────────────────────────
-// For each day, group slots, sort them, merge overlapping 2-hr windows
-// eg: [11:00, 13:30, 15:00] → 11:00–13:30(2.5h but capped by next)→13:30-15:00(1.5h)→15:00-17:00(2h) = 5.5h
-function calcHoursForBookings(bkList) {
-  // Group by date
-  const byDate = {};
-  bkList.forEach(b => {
-    if (!b.date || !b.time) return;
-    if (!byDate[b.date]) byDate[b.date] = [];
-    byDate[b.date].push(timeToMinutes(b.time));
-  });
-  let totalHours = 0;
-  Object.values(byDate).forEach(slots => {
-    const sorted = slots.filter(m => m >= 0).sort((a,b) => a-b);
-    for (let i = 0; i < sorted.length; i++) {
-      const start = sorted[i];
-      const nextSlot = sorted[i+1]; // next booking start
-      const end = start + 120; // default 2hr
-      // If next slot starts before end, cap this session at next slot start
-      const actualEnd = (nextSlot !== undefined && nextSlot < end) ? nextSlot : end;
-      totalHours += (actualEnd - start) / 60;
-    }
-  });
-  return totalHours;
-}
-
 function timeToMinutes(t) {
   if(!t) return -1;
   t=String(t).trim();
@@ -838,7 +851,27 @@ function timeToMinutes(t) {
   return h*60+m;
 }
 
-// Fix 1: Pie chart for revenue, bar chart removed, hours added
+function calcHoursForBookings(bkList) {
+  const byDate={};
+  bkList.forEach(b=>{
+    if(!b.date||!b.time) return;
+    if(!byDate[b.date]) byDate[b.date]=[];
+    byDate[b.date].push(timeToMinutes(b.time));
+  });
+  let totalHours=0;
+  Object.values(byDate).forEach(slots=>{
+    const sorted=slots.filter(m=>m>=0).sort((a,b)=>a-b);
+    for(let i=0;i<sorted.length;i++){
+      const start=sorted[i];
+      const nextSlot=sorted[i+1];
+      const end=start+120;
+      const actualEnd=(nextSlot!==undefined&&nextSlot<end)?nextSlot:end;
+      totalHours+=(actualEnd-start)/60;
+    }
+  });
+  return totalHours;
+}
+
 function renderWdWeChart(){
   let wdRev=0,wdCnt=0,weRev=0,weCnt=0;
   const wdBookings=[],weBookings=[];
@@ -848,12 +881,10 @@ function renderWdWeChart(){
     if(day>=1&&day<=5){wdRev+=fp;wdCnt++;wdBookings.push(b);}
     else{weRev+=fp;weCnt++;weBookings.push(b);}
   });
-
   const wdHrs=calcHoursForBookings(wdBookings);
   const weHrs=calcHoursForBookings(weBookings);
   const wdRPH=wdHrs>0?(wdRev/wdHrs):0;
   const weRPH=weHrs>0?(weRev/weHrs):0;
-
   document.getElementById('wdRevenue').textContent=fmtRM(wdRev);
   document.getElementById('wdCount').textContent=wdCnt;
   document.getElementById('weRevenue').textContent=fmtRM(weRev);
@@ -862,36 +893,26 @@ function renderWdWeChart(){
   document.getElementById('weHours').textContent=fmtHr(weHrs);
   document.getElementById('wdRevPerHour').textContent=wdRPH?`${fmtRM(wdRPH)}/hr avg`:'—';
   document.getElementById('weRevPerHour').textContent=weRPH?`${fmtRM(weRPH)}/hr avg`:'—';
-
   if(wdWeChartInst) wdWeChartInst.destroy();
   const ctx=document.getElementById('wdWeChart').getContext('2d');
-  // Pie chart — only show if there's data
   const total=wdRev+weRev;
   wdWeChartInst=new Chart(ctx,{
     type:'pie',
     data:{
       labels:['Weekday Revenue','Weekend Revenue'],
-      datasets:[{
-        data:[wdRev,weRev],
-        backgroundColor:['rgba(201,125,142,0.75)','rgba(201,169,110,0.75)'],
-        borderColor:['#c97d8e','#c9a96e'],
-        borderWidth:1.5
-      }]
+      datasets:[{data:[wdRev,weRev],backgroundColor:['rgba(201,125,142,0.75)','rgba(201,169,110,0.75)'],borderColor:['#c97d8e','#c9a96e'],borderWidth:1.5}]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{labels:{color:'rgba(255,255,255,0.6)',font:{size:11}}},
-        tooltip:{callbacks:{
-          label:ctx=>{
-            const val=ctx.parsed;
-            const pct=total>0?((val/total)*100).toFixed(1):'0';
-            // Determine RM/hr for this slice
-            const rph=ctx.dataIndex===0?wdRPH:weRPH;
-            const rphStr=rph>0?`  ·  ${fmtRM(rph)}/hr avg`:'';
-            return ` ${fmtRM(val)} (${pct}%)${rphStr}`;
-          }
-        }}
+        tooltip:{callbacks:{label:ctx=>{
+          const val=ctx.parsed;
+          const pct=total>0?((val/total)*100).toFixed(1):'0';
+          const rph=ctx.dataIndex===0?wdRPH:weRPH;
+          const rphStr=rph>0?`  ·  ${fmtRM(rph)}/hr avg`:'';
+          return ` ${fmtRM(val)} (${pct}%)${rphStr}`;
+        }}}
       }
     }
   });
