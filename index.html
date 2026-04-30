@@ -580,6 +580,9 @@ async function submitBooking() {
 
   // Optimistic local update (for time slot blocking without reload)
   bookings.push(booking);
+  
+   // Visits vs Submission traffic
+  gtag('event', 'booking_submitted', { event_category:'Booking', event_label:booking.service, value:1 });
 
   btn.disabled = false;
   btn.textContent = '✦ Request Appointment';
